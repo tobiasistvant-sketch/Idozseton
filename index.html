@@ -3,181 +3,869 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#101827">
-  <meta name="description" content="Időzseton – interaktív keresztyén etikai önismereti játék, 24 órával és két időkerékkel.">
-  <title>Időzseton – Mire költöd az életedet? · v0.2</title>
-  <style>
-    :root{color-scheme:dark;--bg:#0c1525;--card:#152236;--card2:#1b2b42;--line:#324159;--muted:#a8b8ca;--text:#f2f5f7;--gold:#e9b776;--red:#ec6d79;--green:#66d9b3;--shadow:0 24px 70px rgba(0,0,0,.24)}
-    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 8% 5%,#26364b 0%,transparent 38%),radial-gradient(ellipse at 95% 15%,#203e44 0%,transparent 32%),var(--bg);font:16px/1.55 'Segoe UI',Inter,system-ui,-apple-system,sans-serif;color:var(--text)}
-    button,input,textarea{font:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.48}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--gold);outline-offset:3px}a{color:var(--gold)}
-    .wrap{width:min(1250px,calc(100% - 44px));margin:0 auto}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid rgba(214,227,237,.12);padding:22px 0}.logo{border:0;background:none;color:var(--text);display:flex;gap:11px;align-items:center;text-align:left;font-weight:850;letter-spacing:.07em;text-transform:uppercase;font-size:15px}.logo-mark{width:37px;height:37px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;color:var(--gold);font-size:19px}.logo span small{display:block;font-size:9px;letter-spacing:.22em;color:var(--muted);font-weight:550}.steps{display:flex;align-items:center;gap:8px}.step{width:33px;height:33px;border:1px solid #4c5b70;border-radius:50%;background:#19263a;color:#a8b8ca;font-weight:750;font-size:13px}.step.active{background:var(--gold);color:#182333;border-color:var(--gold)}.step.done:not(.active){border-color:var(--green);color:var(--green)}.step-line{width:18px;height:1px;background:#536076}
-    main{min-height:calc(100vh - 152px)}.eyebrow{text-transform:uppercase;letter-spacing:.18em;color:var(--gold);font-size:12px;font-weight:850}.display{font-family:Georgia,'Times New Roman',serif;letter-spacing:-.032em;font-weight:600;line-height:1.06}.lead{color:#cbd7e0;font-size:18px;max-width:690px;line-height:1.65}.hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;min-height:calc(100vh - 195px);gap:32px;padding:65px 0}.hero h1{font-size:clamp(58px,8.1vw,106px);margin:12px 0 0}.hero h2{font-weight:500;color:var(--gold);font-size:clamp(21px,2.6vw,31px);margin:15px 0 27px}.hero-copy{padding-bottom:22px}.hero-visual{display:grid;place-items:center;position:relative;min-height:440px}.hero-halo{position:absolute;width:min(90%,440px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(233,183,118,.12),rgba(233,183,118,.035) 59%,transparent 63%);box-shadow:0 0 90px rgba(97,172,158,.09)}.intro-coin{position:absolute;left:calc(50% + var(--x));top:calc(50% + var(--y));transform:translate(-50%,-50%);width:47px;height:47px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#e9c895,#b67b40);box-shadow:inset 0 0 0 3px rgba(255,252,235,.32),0 8px 18px rgba(0,0,0,.24);color:#23303a;font-weight:850;font-size:13px}.hero-center{width:190px;height:190px;border-radius:50%;background:#17253a;border:2px solid rgba(233,183,118,.7);box-shadow:0 15px 50px #0005,inset 0 0 30px rgba(233,183,118,.05);display:grid;align-content:center;justify-items:center;position:relative}.hero-center .number{font:600 83px/.95 Georgia,serif;color:var(--gold)}.hero-center .caption{text-transform:uppercase;letter-spacing:.18em;color:#d5c2a7;font-size:12px}.hero-note{position:absolute;bottom:0;left:0;right:0;text-align:center;color:var(--muted);font-size:13px}
-    .btn{display:inline-flex;gap:11px;align-items:center;justify-content:center;padding:14px 23px;border-radius:12px;border:1px solid #718094;background:transparent;color:var(--text);font-weight:750;min-height:48px;text-decoration:none}.btn.primary{background:var(--gold);border-color:var(--gold);color:#1b2836;box-shadow:0 9px 28px #e9b77626}.btn:hover:not(:disabled){filter:brightness(1.1);transform:translateY(-1px)}.btn.subtle{border-color:#40536b;background:#1e3047}.btn.warning{border-color:#aa6470;color:#ffc5c9}.btn.small{padding:9px 15px;min-height:36px;font-size:13px}.actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:24px}.screen{padding:38px 0 70px}.screen-header{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}.screen h1{font-size:clamp(34px,4.2vw,55px);margin:8px 0 8px}.subtitle{color:var(--muted);max-width:745px;margin:0;font-size:16px}.stage-pill{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);border:1px solid #5a4c3a;border-radius:20px;padding:8px 13px;white-space:nowrap}
-    .workbench{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(330px,.8fr);gap:22px;align-items:start}.panel{background:linear-gradient(160deg,#18283e,#132034);border:1px solid rgba(196,212,223,.14);border-radius:20px;box-shadow:var(--shadow)}.panel-pad{padding:25px}.panel h2{font:650 22px/1.2 Georgia,serif;letter-spacing:-.01em;margin:0 0 8px}.smallmuted{color:var(--muted);font-size:13px;margin:0}.allocation-top{display:flex;justify-content:space-between;gap:12px;align-items:center}.budget{display:flex;align-items:center;gap:16px;padding:14px 17px;border:1px solid #3f5166;background:#0f1b2d;border-radius:14px;margin:20px 0}.budget-number{font:650 35px/1 Georgia,serif;color:var(--gold);min-width:40px}.budget span{font-size:13px;color:var(--muted)}.budget strong{color:var(--text);display:block;font-size:14px}.budget.warn{border-color:var(--red)}.section-label{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:850;color:#aabbd0;margin:22px 0 10px}.category-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.cat-card{display:flex;min-height:62px;align-items:center;gap:7px;padding:8px;border:1px solid #35465e;border-radius:11px;background:#1b2b42;transition:background .16s,border-color .16s}.cat-card.selected{border-color:var(--gold);background:#263449;box-shadow:0 0 0 1px rgba(233,183,118,.18)}.cat-card.locked{opacity:.85}.cat-select{min-width:0;flex:1;display:flex;align-items:center;gap:8px;background:none;border:0;color:var(--text);text-align:left;padding:3px 0}.cat-name{font-size:12.5px;font-weight:730;line-height:1.2}.swatch{width:10px;height:10px;border-radius:50%;display:inline-block;flex:none;background:var(--dot)}.cat-actions{display:flex;align-items:center;gap:5px}.counter{font-variant-numeric:tabular-nums;min-width:19px;text-align:center;font-weight:830;font-size:14px}.step-btn{width:28px;height:28px;border-radius:8px;border:1px solid #53667c;background:#25354a;color:#f2f5f7;font-size:19px;line-height:1}.step-btn:hover:not(:disabled){background:#344964}.cat-info{font-size:12px;color:var(--muted);margin-top:14px}.section-help{color:#cad7df;font-size:13px;padding:11px 13px;border-left:3px solid var(--gold);background:#233246;border-radius:0 7px 7px 0;margin:16px 0}.lockbar{display:flex;justify-content:space-between;align-items:center;gap:12px;border-radius:12px;padding:12px;background:#362834;border:1px solid #704551;margin:18px 0 4px}.lockbar strong{font-size:13px}.lockbar p{margin:1px 0 0;font-size:12px;color:#e9c2c5}.toggle{display:flex;align-items:center;gap:8px;white-space:nowrap;cursor:pointer;color:#f6e1e0;font-size:13px}.toggle input{accent-color:var(--gold);width:18px;height:18px}
-    .preview-panel{position:sticky;top:20px}.wheel-holder{display:grid;place-items:center;margin:18px 0 4px}.wheel-holder svg{width:min(100%,355px);height:auto;filter:drop-shadow(0 12px 28px #0005)}.wheel-label{text-align:center;color:var(--muted);font-size:13px;margin-top:4px}.coin-grid{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px;margin-top:14px}.coin{width:100%;aspect-ratio:1;border-radius:50%;border:2px solid #bd955d;color:#1a2b38;font-weight:850;font-size:12px;display:grid;place-items:center;background:linear-gradient(135deg,#f0d6a6,#c49451);box-shadow:inset 0 0 0 2px #ffffff44,0 4px 7px #0004;position:relative}.coin.assigned{background:var(--c);border-color:#ffffff65;color:#0d2830}.coin.stolen{border:3px dashed #fd93a3;box-shadow:0 0 0 2px #ae3047,inset 0 0 0 1px #fff8}.coin.locked{cursor:default}.coin:focus-visible{outline:3px solid white}.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:16px 0 4px}.legend-item{display:flex;justify-content:space-between;gap:6px;color:#becbd5;font-size:11px;line-height:1.2}.legend-item strong{color:#fff}.legend-item .swatch{height:9px;width:9px;margin-top:2px}.legend-left{display:flex;align-items:flex-start;gap:5px}.wheel-note{border-top:1px solid #33435a;padding-top:15px;margin-top:17px}.notice{border-radius:11px;padding:12px 14px;font-size:13px;background:#283846;border:1px solid #435d65;color:#dbecef;margin-top:12px}.notice.warning{background:#392a36;border-color:#895565;color:#ffd3d5}.notice.good{background:#223c3a;border-color:#457b71;color:#d5f3e9}.footerline{padding:22px 0 30px;border-top:1px solid #344055;color:#94a6b9;display:flex;gap:20px;justify-content:space-between;font-size:12px}
-    .results-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.78fr);gap:22px;align-items:start}.comparison{padding:22px}.comparison-row{display:grid;grid-template-columns:145px 1fr 54px;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #334157}.comparison-row:last-child{border-bottom:0}.row-name{font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px}.bars{display:grid;gap:5px}.bar-line{display:grid;grid-template-columns:32px 1fr;gap:6px;align-items:center}.bar-line span{font-size:11px;color:#95a8bd}.bar-track{background:#26374c;border-radius:99px;overflow:hidden;height:11px}.bar-fill{height:100%;width:var(--w);background:var(--c);border-radius:99px}.bar-fill.ideal{opacity:.68;box-shadow:inset 0 0 0 1px #ffffff66}.delta{text-align:right;white-space:nowrap;font-size:12px;font-weight:750;color:#aec0cf}.delta.plus{color:var(--green)}.delta.minus{color:#ffabae}.comparison-key{display:flex;gap:17px;align-items:center;color:#bdcbd6;font-size:12px;padding:5px 0 17px}.keybox{width:12px;height:12px;border-radius:3px;background:var(--gold);display:inline-block;margin-right:5px}.keybox.outline{background:transparent;border:2px solid var(--gold)}
-    .reflection{display:grid;gap:12px}.reflection-card{padding:18px;background:#1d3044;border:1px solid #3c5262;border-radius:13px}.reflection-card .eyebrow{font-size:10px}.reflection-card h3{margin:5px 0 6px;font-size:18px;line-height:1.25}.reflection-card p{margin:0;color:#cbd9e0;font-size:13px;line-height:1.6}.scripture{display:inline-block;margin-bottom:7px;color:#d8bd87;font-size:12px;font-weight:750}.commitment{margin-top:22px}.commitment label{display:block;color:#e7eff3;font-weight:700;margin-bottom:9px}.commitment textarea{width:100%;resize:vertical;min-height:108px;background:#0e1b2d;color:var(--text);padding:15px;border:1px solid #4b6075;border-radius:11px;line-height:1.55}.tiny{font-size:11px;color:var(--muted)}.result-wheels{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 18px}.result-wheels .wheel-holder{margin:4px 0}.result-wheels .wheel-holder svg{width:min(100%,230px)}.result-wheels h3{text-align:center;font-size:13px;margin:0}.summary-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}.stat{background:#203249;border:1px solid #384e64;border-radius:12px;padding:16px 10px;text-align:center}.stat strong{display:block;font:600 31px/1.15 Georgia,serif;color:var(--gold)}.stat span{color:#b7c8d5;font-size:11px}
-    @media(max-width:1030px){.workbench,.results-grid{grid-template-columns:1fr}.preview-panel{position:static}.hero{grid-template-columns:1fr 1fr}.hero-visual{min-height:340px}.intro-coin{width:36px;height:36px;font-size:10px}.hero-center{width:150px;height:150px}.hero-center .number{font-size:60px}}
-    @media(max-width:740px){.wrap{width:min(100% - 24px,1250px)}.topbar{padding:14px 0}.step-line{width:7px}.step{width:27px;height:27px;font-size:11px}.logo{font-size:12px;gap:7px}.logo-mark{width:32px;height:32px}.hero{grid-template-columns:1fr;gap:6px;padding:38px 0 46px}.hero h1{font-size:65px}.hero-copy{padding-bottom:0}.hero-visual{min-height:360px}.hero-note{bottom:-10px}.screen{padding:27px 0 45px}.screen-header{display:block}.stage-pill{display:inline-flex;margin-top:12px}.panel-pad{padding:17px}.category-grid{grid-template-columns:1fr}.cat-card{min-height:56px}.coin-grid{gap:5px}.comparison-row{grid-template-columns:105px 1fr 42px;gap:6px;padding:10px 0}.row-name{font-size:11px}.comparison{padding:13px}.result-wheels{grid-template-columns:1fr 1fr;gap:3px}.result-wheels .wheel-holder svg{width:100%}.summary-stats{gap:5px}.stat{padding:11px 3px}.stat strong{font-size:24px}.footerline{display:block;text-align:center}.footerline span{display:block;margin-bottom:5px}}
-    @media(max-width:400px){.hero-visual{min-height:402px}.intro-coin{left:calc(50% + var(--xs));top:calc(50% + var(--ys))}.hero-note{bottom:-6px}}
-    @media(max-width:350px){.step-line{display:none}.steps{gap:3px}.step{width:25px;height:25px}.hero-visual{min-height:360px}.intro-coin{left:calc(50% + var(--xss));top:calc(50% + var(--yss))}}
-    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
-    .more-reflections{margin-top:13px;padding:12px;border:1px solid #53667c;border-radius:11px;background:#1b2b42}.more-reflections summary{cursor:pointer;color:#e9b776;font-weight:750;font-size:14px}.more-reflections .reflection-card{margin-top:13px}
-  </style>
+  <meta name="theme-color" content="#052738">
+  <meta name="description" content="Időzseton – Interaktív keresztyén etikai önismereti játék, 24 órával és két időkerékkel XI. osztályos diákoknak.">
+  <title>Időzseton – Mire költöd az életedet?</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Application CSS -->
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="wrap">
-    <header class="topbar">
-      <button class="logo" data-action="home" aria-label="Időzseton címlap"><span class="logo-mark">⏳</span><span>IDŐZSETON<small>ETIKAI ÖNISMERETI JÁTÉK</small></span></button>
-      <nav class="steps" id="steps" aria-label="Játékoldalak"></nav>
+  <!-- Accessibility Skip Link -->
+  <a href="#app" class="skip-link">Ugrás a fő tartalomhoz</a>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header" role="banner">
+      <div class="header-inner">
+        <button class="logo-area" id="header-logo-btn" data-action="home" aria-label="Időzseton főoldal">
+          <div class="logo-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="app-title-header">IDŐZSETON</span>
+            <span class="app-subtitle-header">Keresztyén Etikai Önismereti Játék</span>
+          </div>
+        </button>
+
+        <div class="header-meta">
+          <span class="subject-badge">Református vallás – XI. osztály</span>
+        </div>
+      </div>
+
+      <!-- Steps Navigation -->
+      <div class="step-bar-container">
+        <nav class="steps-nav" id="steps-nav" aria-label="Játék lépések"></nav>
+      </div>
     </header>
-    <main id="app" aria-live="polite"></main>
-    <footer class="footerline"><span>24 óra • Egy iskolai nap • A te döntéseid</span><span>Helyben működő prototípus · nincs adatküldés, nincs regisztráció</span></footer>
+
+    <!-- Main Content Area -->
+    <main id="app" class="app-main" aria-live="polite" tabindex="-1"></main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-inner">
+        <span>24 óra • Egy átlagos iskolai nap • A te döntéseid</span>
+        <span>Helyben működő alkalmazás · Nincs adatgyűjtés és regisztráció</span>
+      </div>
+    </footer>
   </div>
+
   <script>
     'use strict';
-    const CATEGORIES=[
-      {id:'school',name:'Iskola / munkahely',group:'red',color:'#ed6a78',symbol:'I'},
-      {id:'travel',name:'Utazás',group:'red',color:'#cf5c6c',symbol:'U'},
-      {id:'duty',name:'Egyéb kötelesség',group:'red',color:'#f0919a',symbol:'K'},
-      {id:'sleep',name:'Alvás',group:'green',color:'#80dfc0',symbol:'A'},
-      {id:'study',name:'Tanulás',group:'green',color:'#38b9ae',symbol:'T'},
-      {id:'phone',name:'Telefon / internet',group:'green',color:'#259993',symbol:'N'},
-      {id:'family',name:'Család',group:'green',color:'#9adfb5',symbol:'C'},
-      {id:'friends',name:'Barátok',group:'green',color:'#58bc93',symbol:'B'},
-      {id:'sport',name:'Sport / hobbi',group:'green',color:'#8fd18b',symbol:'S'},
-      {id:'faith',name:'Hit / elcsendesedés',group:'green',color:'#b9dda0',symbol:'H'},
-      {id:'rest',name:'Pihenés / szórakozás',group:'green',color:'#4eaa84',symbol:'P'},
-      {id:'other',name:'Egyéb',group:'green',color:'#80b9b0',symbol:'E'}
+
+    // 12 Functional Time Categories
+    const CATEGORIES = [
+      { id: 'school', name: 'Iskola / munkahely', group: 'red', color: '#E53E3E', symbol: 'I' },
+      { id: 'travel', name: 'Utazás', group: 'red', color: '#DD6B20', symbol: 'U' },
+      { id: 'duty', name: 'Egyéb kötelesség', group: 'red', color: '#D69E2E', symbol: 'K' },
+      { id: 'sleep', name: 'Alvás', group: 'green', color: '#319795', symbol: 'A' },
+      { id: 'study', name: 'Tanulás', group: 'green', color: '#3182CE', symbol: 'T' },
+      { id: 'phone', name: 'Telefon / internet', group: 'green', color: '#00B5D8', symbol: 'N' },
+      { id: 'family', name: 'Család', group: 'green', color: '#38A169', symbol: 'C' },
+      { id: 'friends', name: 'Barátok', group: 'green', color: '#805AD5', symbol: 'B' },
+      { id: 'sport', name: 'Sport / hobbi', group: 'green', color: '#D69E2E', symbol: 'S' },
+      { id: 'faith', name: 'Hit / elcsendesedés', group: 'green', color: '#319795', symbol: 'H' },
+      { id: 'rest', name: 'Pihenés / szórakozás', group: 'green', color: '#3182CE', symbol: 'P' },
+      { id: 'other', name: 'Egyéb', group: 'green', color: '#718096', symbol: 'E' }
     ];
-    const categoryMap=Object.fromEntries(CATEGORIES.map(x=>[x.id,x]));
-    const state={page:0,reached:0,selected:'school',unlockRed:false,real:Array.from({length:24},(_,id)=>({id,cat:null,source:null,origin:null})),ideal:null,notice:'',commitment:''};
-    const $=id=>document.getElementById(id);
-    const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-    const tokens=()=>state.page===2?state.ideal:state.real;
-    const count=(list,id)=>list.filter(t=>t.cat===id).length;
-    const countFree=list=>list.filter(t=>!t.cat).length;
-    const stolen=list=>list.filter(t=>t.source==='red'&&t.cat&&categoryMap[t.cat].group==='green').length;
-    function prepareIdeal(){state.ideal=state.real.map(t=>({id:t.id,cat:categoryMap[t.cat].group==='red'?t.cat:null,source:categoryMap[t.cat].group,origin:t.cat}));state.unlockRed=false;state.selected='sleep';}
-    function invalidateIdeal(){if(state.page===1&&state.ideal){state.ideal=null;state.reached=1;}}
-    function addToken(id){const cat=categoryMap[id],list=tokens();if(!cat)return;if(state.page===2&&cat.group==='red'&&!state.unlockRed){state.notice='A piros idő alapból kötött. Előbb kapcsold be a módosítást.';render();return;}
-      let free=list.filter(t=>!t.cat);if(!free.length){state.notice='Minden időzsetont kiosztottál. Ha módosítanál, előbb vegyél vissza egyet.';render();return;}
-      let pick=state.page===2?free.find(t=>t.source===cat.group)||free[0]:free[0];pick.cat=id;invalidateIdeal();state.notice='';render();}
-    function removeToken(id,tokenId=null){const cat=categoryMap[id],list=tokens();if(!cat)return;if(state.page===2&&cat.group==='red'&&!state.unlockRed){state.notice='A piros idő rögzített. A módosításhoz előbb oldd fel.';render();return;}
-      let matches=list.filter(t=>t.cat===id);let pick=tokenId===null?matches[matches.length-1]:matches.find(t=>t.id===tokenId);if(!pick)return;pick.cat=null;invalidateIdeal();state.notice='';render();}
-    function setPage(page){if(page>state.reached)return;state.page=page;state.selected=page===2?'sleep':'school';state.notice='';render();window.scrollTo({top:0,behavior:'smooth'});}
-    function advance(page){state.reached=Math.max(state.reached,page);setPage(page);}
-    function stepNavigation(){const labels=['Címlap','Valóság','Ideális','Összevetés'];$('steps').innerHTML=labels.map((s,i)=>`${i?'<span class="step-line"></span>':''}<button class="step ${state.page===i?'active':i<state.reached?'done':''}" data-page="${i}" ${i>state.reached?'disabled':''} title="${s}" aria-label="${i+1}. ${s}" ${state.page===i?'aria-current="step"':''}>${i+1}</button>`).join('');}
-    function arcPath(cx,cy,rIn,rOut,angleStart,angleEnd){let p=(r,a)=>({x:cx+r*Math.cos(a*Math.PI/180),y:cy+r*Math.sin(a*Math.PI/180)});const a=p(rOut,angleStart),b=p(rOut,angleEnd),c=p(rIn,angleEnd),d=p(rIn,angleStart);return`M ${a.x.toFixed(3)} ${a.y.toFixed(3)} A ${rOut} ${rOut} 0 0 1 ${b.x.toFixed(3)} ${b.y.toFixed(3)} L ${c.x.toFixed(3)} ${c.y.toFixed(3)} A ${rIn} ${rIn} 0 0 0 ${d.x.toFixed(3)} ${d.y.toFixed(3)} Z`;}
-    function wheelSvg(list,description){const ordered=[...CATEGORIES.flatMap(c=>list.filter(t=>t.cat===c.id)),...list.filter(t=>!t.cat)];let paths=ordered.map((t,i)=>{let a=-90+i*15,b=a+15;let isStolen=t.source==='red'&&t.cat&&categoryMap[t.cat].group==='green';let fill=t.cat?categoryMap[t.cat].color:'#27384e';let label=t.cat?`${categoryMap[t.cat].name} – ${isStolen?'kötött időből átcsoportosítva':'1 óra'}`:'Még nincs kiosztva';return `<g><title>${escapeHtml(label)}</title><path d="${arcPath(170,170,70,148,a,b)}" fill="${fill}" stroke="#142237" stroke-width="2"/>${isStolen?`<path d="${arcPath(170,170,133,146,a+1.2,b-1.2)}" fill="#a8234e" stroke="#ffd5d8" stroke-width="1.5"/>`:''}<text x="${(170+109*Math.cos((a+b)/2*Math.PI/180)).toFixed(2)}" y="${(174+109*Math.sin((a+b)/2*Math.PI/180)).toFixed(2)}" fill="${t.cat?'#132836':'#8195ac'}" text-anchor="middle" font-size="11" font-weight="800">${i+1}</text></g>`;}).join('');let used=24-countFree(list);return `<svg viewBox="0 0 340 340" role="img" aria-label="${escapeHtml(description)}. ${used} a 24 órából kiosztva."><circle cx="170" cy="170" r="153" fill="none" stroke="#617389" stroke-opacity=".32" stroke-width="1"/>${paths}<circle cx="170" cy="170" r="66" fill="#111e30" stroke="#40536a" stroke-width="1.5"/><text x="170" y="164" text-anchor="middle" font-family="Georgia,serif" font-size="51" fill="#e9b776">24</text><text x="170" y="188" text-anchor="middle" font-size="12" letter-spacing="2" fill="#c9d4df">ÓRA</text></svg>`;}
-    function introCoins(){return Array.from({length:24},(_,i)=>{const a=(i*15-90)*Math.PI/180,x=Math.cos(a)*175,y=Math.sin(a)*175,xs=Math.cos(a)*144,ys=Math.sin(a)*144,xss=Math.cos(a)*125,yss=Math.sin(a)*125;return `<div class="intro-coin" style="--x:${x.toFixed(2)}px;--y:${y.toFixed(2)}px;--xs:${xs.toFixed(2)}px;--ys:${ys.toFixed(2)}px;--xss:${xss.toFixed(2)}px;--yss:${yss.toFixed(2)}px">${i+1}</div>`}).join('');}
-    function renderIntro(){return `<section class="hero"><div class="hero-copy"><div class="eyebrow">Interaktív keresztyén etikai játék · XI. osztály</div><h1 class="display">IDŐ<br>ZSETON</h1><h2>Mire költöd az életedet?</h2><p class="lead">Minden iskolai napod 24 órából áll. Egy részéről mások döntenek, a többit te osztod be. De vajon az időd tényleg azt mutatja, ami fontos neked?</p><p class="smallmuted">Két időkerék. Egy őszinte összehasonlítás. Saját következtetések.</p><div class="actions"><button class="btn primary" data-action="start">Induljon a játék <span aria-hidden="true">→</span></button></div></div><div class="hero-visual"><div class="hero-halo"></div>${introCoins()}<div class="hero-center"><span class="number">24</span><span class="caption">Időzseton</span></div><div class="hero-note">24 zseton = 24 óra · Egy átlagos iskolai nap</div></div></section>`;}
-    function categoryRow(c,list){let n=count(list,c.id),locked=state.page===2&&c.group==='red'&&!state.unlockRed;return `<div class="cat-card ${state.selected===c.id?'selected':''} ${locked?'locked':''}"><button class="cat-select" data-select="${c.id}" aria-pressed="${state.selected===c.id}" title="${escapeHtml(c.name)} kiválasztása"><span class="swatch" style="--dot:${c.color}"></span><span class="cat-name">${escapeHtml(c.name)}</span></button><div class="cat-actions"><button class="step-btn" data-dec="${c.id}" ${locked||n===0?'disabled':''} aria-label="${escapeHtml(c.name)}: egy óra elvétele">−</button><span class="counter">${n}</span><button class="step-btn" data-inc="${c.id}" ${locked||countFree(list)===0?'disabled':''} aria-label="${escapeHtml(c.name)}: egy óra hozzáadása">+</button></div></div>`;}
-    function coinGrid(list){return list.map((t,i)=>{let cat=t.cat?categoryMap[t.cat]:null,ss=t.source==='red'&&cat&&cat.group==='green';let locked=state.page===2&&cat&&cat.group==='red'&&!state.unlockRed;return `<button class="coin ${cat?'assigned':''} ${ss?'stolen':''} ${locked?'locked':''}" data-token="${i}" style="--c:${cat?cat.color:'#e9b776'}" title="${cat?escapeHtml(cat.name)+(ss?' – kötött időből':''):'Szabad időzseton – add a kiválasztott kategóriához'}" aria-label="${i+1}. zseton: ${cat?escapeHtml(cat.name):'szabad'}${ss?', eredetileg kötött idő':''}">${cat?cat.symbol:i+1}</button>`;}).join('');}
-    function legend(list){return CATEGORIES.filter(c=>count(list,c.id)>0).map(c=>`<div class="legend-item"><span class="legend-left"><span class="swatch" style="--dot:${c.color}"></span>${escapeHtml(c.name)}</span><strong>${count(list,c.id)} ó</strong></div>`).join('');}
-    function renderWorkbench(){let ideal=state.page===2,list=tokens(),free=countFree(list),used=24-free,st=ideal?stolen(list):0;const title=ideal?'Az én ideális iskolai napom':'A valóság – így telik egy iskolai napom';const subtitle=ideal?'A piros, kötött időt áthoztuk a valós napodból. A zöld időt szabadon újratervezheted; szükség esetén a piros is feloldható.':'Gondolj egy átlagos tanítási napra! Nem hétvégére vagy szünetre. Előbb a kötött időt, majd a többi órát oszd be a valós szokásaid szerint.';let lock=ideal?`<div class="lockbar"><div><strong>🔒 Kötött idő átvéve</strong><p>A piros zsetonok alapból rögzítve vannak, de módosíthatók.</p></div><label class="toggle"><input id="unlock" type="checkbox" ${state.unlockRed?'checked':''}> Feloldom</label></div>${state.unlockRed?'<div class="notice warning">A pirosból a zöld kategóriákba kerülő zsetonokat a játék „lopott időként” külön jelöli. A „lopott idő” a játék szemléltető elnevezése; nem automatikus erkölcsi ítélet.</div>':''}`:'';
-      let notice=state.notice?`<div class="notice warning" role="status">${escapeHtml(state.notice)}</div>`:'';
-      return `<section class="screen"><div class="screen-header"><div><div class="eyebrow">${ideal?'Második időkerék':'Első időkerék'}</div><h1 class="display">${title}</h1><p class="subtitle">${subtitle}</p></div><div class="stage-pill">${ideal?'Újratervezés':'Valóság'} · 24 óra</div></div><div class="workbench"><div class="panel panel-pad"><div class="allocation-top"><div><h2>Oszd ki a zsetonokat!</h2><p class="smallmuted">Válassz kategóriát, majd nyomj + jelet vagy egy szabad zsetont.</p></div></div><div class="budget ${free===0?'':'warn'}"><strong class="budget-number">${free}</strong><div><strong>${free===0?'Minden óra a helyére került':'Még kiosztható zseton'}</strong><span>${used}/24 zseton kiosztva · minden zseton egy óra</span></div></div>${lock}<div class="section-label">Piros · kötött idő</div><div class="category-grid">${CATEGORIES.filter(c=>c.group==='red').map(c=>categoryRow(c,list)).join('')}</div><div class="section-label">Zöld · beosztható idő</div><div class="category-grid">${CATEGORIES.filter(c=>c.group==='green').map(c=>categoryRow(c,list)).join('')}</div><p class="cat-info">A zöld szín nem azt jelenti, hogy a tevékenység elhagyható: az alvás például alapvető szükséglet. A szín azt mutatja, mekkora mozgástered van az időtartam megválasztásában.</p>${notice}<div class="actions"><button class="btn subtle" data-action="back">← Vissza</button><button class="btn primary" data-action="finish" ${free?'disabled':''}>${ideal?'Kérek összehasonlítást':'Elkészült az időkerékem'} <span aria-hidden="true">→</span></button></div></div><aside class="panel panel-pad preview-panel"><div class="eyebrow">${ideal?'Ideális időkerék':'Valós időkerék'}</div><h2>24 szelet · 24 óra</h2><div class="wheel-holder">${wheelSvg(list,ideal?'Ideális időkerék':'Valós időkerék')}</div><p class="wheel-label">${free?`${free} üres szelet vár még egy zsetonra`:'Készen van a 24 szeletes időkerék!'}</p><div class="section-label">A 24 zsetonod</div><p class="smallmuted">Kattints egy arany zsetonra: a kijelölt kategóriába kerül. A kitöltöttekre kattintva visszaveheted őket.</p><div class="coin-grid">${coinGrid(list)}</div>${ideal&&st?`<div class="notice warning"><strong>${st} „lopott” zseton</strong><br>Ennyi eredetileg piros órát osztottál át zöld tevékenységre. Ezeket piros szegély jelöli.</div>`:''}<div class="section-label">Jelmagyarázat</div><div class="legend">${legend(list)||'<p class="smallmuted">Még nincs kiosztott idő.</p>'}</div><div class="wheel-note smallmuted">Piros = kötött idő · Zöld = beosztható idő · Piros szegélyű zöld = kötött időből átcsoportosítva.</div></aside></div></section>`;}
-    function diffText(d){return d>0?`+${d} ó`:d<0?`${d} ó`:'–';}
-    function comparisonRows(){return CATEGORIES.map(c=>{let a=count(state.real,c.id),b=count(state.ideal,c.id),delta=b-a;return `<div class="comparison-row"><div class="row-name"><span class="swatch" style="--dot:${c.color}"></span>${escapeHtml(c.name)}</div><div class="bars"><div class="bar-line"><span>Most</span><div class="bar-track"><div class="bar-fill" style="--w:${100*a/12}%;--c:${c.color}"></div></div></div><div class="bar-line"><span>Terv</span><div class="bar-track"><div class="bar-fill ideal" style="--w:${100*b/12}%;--c:${c.color}"></div></div></div></div><div class="delta ${delta>0?'plus':delta<0?'minus':''}">${diffText(delta)}</div></div>`;}).join('');}
-    // Az értelmezési szövegek a mellékelt FORRASJEGYZEK.md dokumentumban ellenőrizhető
-    // feltöltött tananyagokra épülnek. Az 'if' feltételek játékmechanikai szabályok:
-    // a források NEM adnak óraszám szerinti erkölcsi határértékeket.
-    function getInsights(){
-      const real=state.real,ideal=state.ideal,items=[];
-      const d=id=>count(ideal,id)-count(real,id);
-      const st=stolen(ideal);
-      if(st>0){items.push({
-        tag:'Szabadság és felelősség',title:`${st} kötött órát más célra fordítanál`,
-        verse:'Ef 5,15–16 · 1Kor 10,23–24',
-        body:'Ezek a zsetonok a valóságban kötelezettséghez tartoztak. Az átcsoportosítás oka számít: egy valóban megváltozott helyzet nem ugyanaz, mint egy vállalt feladat elkerülése. Kit érintene a döntésed, és milyen következményekkel járhatna?',
-        question:'Ha ezt a változtatást holnap megtennéd, kivel kellene előbb egyeztetned?',
-        source:'XI. református tanterv, 10. és 18. PDF-old.; Napjaink etikai kihívásai, 18–19. o.'
-      });}
-      if(d('sleep')>0){items.push({
-        tag:'Pihenés és feltöltődés',title:`${d('sleep')} órával több alvást tervezel`,
-        verse:'2Móz 20,8–11 · Mk 2,27',
-        body:'Az alvást a tankönyv a passzív rekreáció példájaként említi. A munka és a pihenés egészséges váltakozása fontos; a pihenés nem pusztán a megmaradó idő kitöltése.',
-        question:'Melyik jelenlegi elfoglaltságodból tudnád ezt az időt reálisan felszabadítani?',
-        source:'Napjaink etikai kihívásai, 15. és 17–18. o.'
-      });}else if(d('sleep')<0){items.push({
-        tag:'A pihenés helye',title:`${Math.abs(d('sleep'))} órával kevesebb alvást tervezel`,
-        verse:'2Móz 20,8–11 · Mk 2,27',
-        body:'Az alvás idejét szabadabban osztod be, de a pihenés alapvető emberi szükséglet. A tankönyv hangsúlyozza, hogy a tartós pihenéshiány kimerüléshez vezethet. A játék nem szab meg „helyes” alvásóraszámot.',
-        question:'A felszabadított idő nyeresége arányban állhat azzal, amit a pihenésből elveszel?',
-        source:'Napjaink etikai kihívásai, 15., 17–18. o.'
-      });}
-      if(d('phone')!==0){items.push({
-        tag:'Digitális szokások és önuralom',
-        title:d('phone')<0?`${Math.abs(d('phone'))} órával kevesebb képernyőidőt választanál`:`${d('phone')} órával több képernyőidőt választanál`,
-        verse:'1Kor 6,12',
-        body:'A digitális eszközök tanulásra, kapcsolattartásra és szórakozásra is szolgálnak. A hosszú képernyőidő önmagában nem bizonyít függőséget; a cél, a következmények és az önkontroll a lényeg. A „Csak még öt perc!” történet azt mutatja meg, hogyan szoríthatja háttérbe a késő esti görgetés az alvást.',
-        question:'Te választod meg, mikor fejezed be, vagy nehéz abbahagyni?',
-        source:'Keresztyén etika a digitális világban – LIVRESQ-forrásanyag, 2–3. PDF-old.; Digitális Lelkiismeret, 33–37. PDF-old.'
-      });}
-      if(d('family')!==0||d('friends')!==0){items.push({
-        tag:'Kapcsolatok és felebaráti felelősség',
-        title:(d('family')+d('friends'))>0?'Több időt szánnál a kapcsolataidra':'A kapcsolatokra szánt idődet is átrendeznéd',
-        verse:'1Kor 10,23–24 · Mt 22,39',
-        body:'A keresztyén szabadság nemcsak azt vizsgálja, nekem mi jó, hanem a másik ember javát is. A tankönyv a stabil emberi kapcsolatokat az egészséges életmód részeként említi. Az óraszám önmagában nem mutatja meg egy kapcsolat minőségét.',
-        question:'Ki az, akire szeretnél tudatosabban figyelni a következő iskolai napon?',
-        source:'Napjaink etikai kihívásai, 19. o.; XI. református tanterv, 17–18. PDF-old.'
-      });}
-      if(d('rest')!==0||d('sport')!==0){items.push({
-        tag:'Rekreáció és kiegyensúlyozottság',
-        title:'Más arányban osztanád be a kikapcsolódást',
-        verse:'2Móz 20,8–11 · Mk 2,27',
-        body:'A rekreációnak több formája van: mozgás, játék, művelődés, kikapcsolódás és nyugalom. A tankönyv szerint az a fontos, hogy valóban feltöltsön, és ne ártson neked vagy másoknak.',
-        question:'Az általad választott időtöltés után inkább feltöltődsz, vagy még fáradtabbnak érzed magad?',
-        source:'Napjaink etikai kihívásai, 14–19. o.; Napjaink etikai kihívásai – Tanári segédanyag, 6. PDF-old.'
-      });}
-      if(d('study')!==0){items.push({
-        tag:'Tanulás és a tevékenységek egyensúlya',
-        title:d('study')>0?`${d('study')} órával több tanulást tervezel`:`${Math.abs(d('study'))} órával kevesebb tanulást tervezel`,
-        verse:'Ef 5,15–16 · Kol 3,17',
-        body:'A munka és a tanulás nem pusztán kényszer; ugyanakkor a túlzott teljesítményre törekvés a pihenés rovására mehet. A tanári segédanyag külön hangsúlyozza a munka és szabadidő egyensúlyát.',
-        question:'Mi segítene abban, hogy a feladataidra és a pihenésre is jusson hely?',
-        source:'Napjaink etikai kihívásai – Tanári segédanyag, 6–7. PDF-old.; XI. református tanterv, 18. PDF-old.'
-      });}
-      if(d('faith')!==0){items.push({
-        tag:'Hit és elcsendesedés',
-        title:d('faith')>0?'Több időt hagynál a hitnek és az elcsendesedésnek':'Átgondolnád az elcsendesedés helyét',
-        verse:'Zsolt 23 · Zsolt 25 · Ef 5,15–16',
-        body:'A XI. osztályos tanterv az Istenben való megpihenést és a döntésekhez kért vezetést is megjeleníti. Az időkerék a ráfordított órákat mutatja, de önmagában nem alkalmas a hit vagy az Istennel való kapcsolat értékelésére.',
-        question:'Hogyan lehetne az imádság vagy a csend a mindennapi döntéseid része?',
-        source:'XI. református tanterv, 10. és 17–18. PDF-old.'
-      });}
-      if(d('other')!==0){items.push({
-        tag:'Ami nem fér bele a kategóriákba',title:'Az „egyéb” időd is változna',
-        verse:'Ef 5,15–16',
-        body:'Az időkerék nem tudja helyetted megmondani, mi tartozik az „egyéb” kategóriába. Az életkörülmények és a családi elvárások sokfélék; ugyanannyi óra két embernél egészen mást jelenthet.',
-        question:'Mi található valójában az „egyéb” óráid mögött?',
-        source:'Napjaink etikai kihívásai, 15. o.; Tanári segédanyag, 8. PDF-old.'
-      });}
-      if(!items.length){items.push({
-        tag:'Önismeret és felelős döntés',title:'A két napodban nincs nagy változás',
-        verse:'Ef 5,15–16 · 1Kor 6,12',
-        body:'A két időkerék önmagában nem ad erkölcsi osztályzatot. A tanári segédanyag arra hív, hogy a tevékenységeinket összefüggéseikben nézzük, és ne egy szabálylistából induljunk ki.',
-        question:'Mi az az egy szokásod, amelyet most is szívesen megtartanál, és miért?',
-        source:'Napjaink etikai kihívásai – Tanári segédanyag, 6–9. PDF-old.'
-      });}
+
+    const categoryMap = Object.fromEntries(CATEGORIES.map(x => [x.id, x]));
+
+    // Global State
+    const state = {
+      page: 0,
+      reached: 0,
+      selected: 'school',
+      unlockRed: false,
+      real: Array.from({ length: 24 }, (_, id) => ({ id, cat: null, source: null, origin: null })),
+      ideal: null,
+      notice: '',
+      commitment: ''
+    };
+
+    const $ = id => document.getElementById(id);
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, c => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[c]));
+    }
+
+    const tokens = () => (state.page === 2 ? state.ideal : state.real);
+    const count = (list, id) => list.filter(t => t.cat === id).length;
+    const countFree = list => list.filter(t => !t.cat).length;
+    const stolen = list => list.filter(t => t.source === 'red' && t.cat && categoryMap[t.cat].group === 'green').length;
+
+    function prepareIdeal() {
+      state.ideal = state.real.map(t => ({
+        id: t.id,
+        cat: categoryMap[t.cat].group === 'red' ? t.cat : null,
+        source: categoryMap[t.cat].group,
+        origin: t.cat
+      }));
+      state.unlockRed = false;
+      state.selected = 'sleep';
+    }
+
+    function invalidateIdeal() {
+      if (state.page === 1 && state.ideal) {
+        state.ideal = null;
+        state.reached = 1;
+      }
+    }
+
+    function addToken(id) {
+      const cat = categoryMap[id];
+      const list = tokens();
+      if (!cat) return;
+
+      if (state.page === 2 && cat.group === 'red' && !state.unlockRed) {
+        state.notice = 'A piros idő alapból kötött. A módosításához előbb kapcsold be a feloldást.';
+        render();
+        return;
+      }
+
+      const free = list.filter(t => !t.cat);
+      if (!free.length) {
+        state.notice = 'Minden időzsetont kiosztottál (24 óra). Ha módosítanál, előbb vegyél vissza egyet.';
+        render();
+        return;
+      }
+
+      let pick = state.page === 2 ? free.find(t => t.source === cat.group) || free[0] : free[0];
+      pick.cat = id;
+      invalidateIdeal();
+      state.notice = '';
+      render();
+    }
+
+    function removeToken(id, tokenId = null) {
+      const cat = categoryMap[id];
+      const list = tokens();
+      if (!cat) return;
+
+      if (state.page === 2 && cat.group === 'red' && !state.unlockRed) {
+        state.notice = 'A piros idő alapból rögzített. A módosításhoz előbb oldd fel.';
+        render();
+        return;
+      }
+
+      const matches = list.filter(t => t.cat === id);
+      let pick = tokenId === null ? matches[matches.length - 1] : matches.find(t => t.id === tokenId);
+      if (!pick) return;
+
+      pick.cat = null;
+      invalidateIdeal();
+      state.notice = '';
+      render();
+    }
+
+    function setPage(page) {
+      if (page > state.reached) return;
+      state.page = page;
+      state.selected = page === 2 ? 'sleep' : 'school';
+      state.notice = '';
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function advance(page) {
+      state.reached = Math.max(state.reached, page);
+      setPage(page);
+    }
+
+    function renderStepsNav() {
+      const labels = ['Címlap', 'Valós nap', 'Ideális nap', 'Összehasonlítás'];
+      const nav = $('steps-nav');
+      if (!nav) return;
+
+      nav.innerHTML = labels.map((label, i) => {
+        const isActive = state.page === i;
+        const isDone = i < state.reached;
+        const isDisabled = i > state.reached;
+        return `
+          ${i > 0 ? `<div class="step-divider ${i <= state.reached ? 'active' : ''}"></div>` : ''}
+          <button class="step-item ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}"
+                  data-page="${i}"
+                  ${isDisabled ? 'disabled' : ''}
+                  aria-label="${i + 1}. lépés: ${label}"
+                  ${isActive ? 'aria-current="step"' : ''}>
+            <span class="step-badge">${i + 1}</span>
+            <span class="step-label">${label}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function arcPath(cx, cy, rIn, rOut, angleStart, angleEnd) {
+      const p = (r, a) => ({
+        x: cx + r * Math.cos(a * Math.PI / 180),
+        y: cy + r * Math.sin(a * Math.PI / 180)
+      });
+      const a = p(rOut, angleStart);
+      const b = p(rOut, angleEnd);
+      const c = p(rIn, angleEnd);
+      const d = p(rIn, angleStart);
+      return `M ${a.x.toFixed(3)} ${a.y.toFixed(3)} A ${rOut} ${rOut} 0 0 1 ${b.x.toFixed(3)} ${b.y.toFixed(3)} L ${c.x.toFixed(3)} ${c.y.toFixed(3)} A ${rIn} ${rIn} 0 0 0 ${d.x.toFixed(3)} ${d.y.toFixed(3)} Z`;
+    }
+
+    function wheelSvg(list, description) {
+      const ordered = [...CATEGORIES.flatMap(c => list.filter(t => t.cat === c.id)), ...list.filter(t => !t.cat)];
+      let paths = ordered.map((t, i) => {
+        let a = -90 + i * 15, b = a + 15;
+        let isStolen = t.source === 'red' && t.cat && categoryMap[t.cat].group === 'green';
+        let fill = t.cat ? categoryMap[t.cat].color : '#E2E8F0';
+        let label = t.cat ? `${categoryMap[t.cat].name} – ${isStolen ? 'kötött időből átcsoportosítva' : '1 óra'}` : 'Még nincs kiosztva';
+        return `
+          <g>
+            <title>${escapeHtml(label)}</title>
+            <path d="${arcPath(170, 170, 70, 148, a, b)}" fill="${fill}" stroke="#FFFFFF" stroke-width="2"/>
+            ${isStolen ? `<path d="${arcPath(170, 170, 133, 146, a + 1.2, b - 1.2)}" fill="#C53030" stroke="#FEB2B2" stroke-width="1.5"/>` : ''}
+            <text x="${(170 + 109 * Math.cos((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
+                  y="${(174 + 109 * Math.sin((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
+                  fill="${t.cat ? '#FFFFFF' : '#64748B'}"
+                  text-anchor="middle" font-size="11" font-weight="800">${i + 1}</text>
+          </g>
+        `;
+      }).join('');
+      let used = 24 - countFree(list);
+      return `
+        <svg viewBox="0 0 340 340" role="img" aria-label="${escapeHtml(description)}. ${used} a 24 órából kiosztva.">
+          <circle cx="170" cy="170" r="153" fill="none" stroke="#CBD5E1" stroke-width="1"/>
+          ${paths}
+          <circle cx="170" cy="170" r="66" fill="#052738" stroke="#31B6C7" stroke-width="2"/>
+          <text x="170" y="164" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="46" font-weight="700" fill="#31B6C7">24</text>
+          <text x="170" y="188" text-anchor="middle" font-size="11" letter-spacing="2" font-weight="700" fill="#FFFFFF">ÓRA</text>
+        </svg>
+      `;
+    }
+
+    function introCoins() {
+      return Array.from({ length: 24 }, (_, i) => {
+        const a = (i * 15 - 90) * Math.PI / 180;
+        const x = Math.cos(a) * 150;
+        const y = Math.sin(a) * 150;
+        return `<div class="hero-orbit-coin" style="--x:${x.toFixed(2)}px;--y:${y.toFixed(2)}px">${i + 1}</div>`;
+      }).join('');
+    }
+
+    function renderIntro() {
+      return `
+        <section class="hero-card">
+          <div class="hero-text-content">
+            <span class="hero-badge">XI. Osztály · Keresztyén Etika</span>
+            <h1 class="hero-title">IDŐZSETON</h1>
+            <h2 class="hero-subtitle">Mire költöd az életedet?</h2>
+            <p class="hero-lead">Minden iskolai napod 24 egyórányi időzsetonból áll. Egy részéről mások dönteneak, a többit te osztod be. De vajon az időd beosztása azt tükrözi, ami valóban fontos neked?</p>
+            <p class="hero-subtext">Két időkerék. Egy őszinte összehasonlítás. Saját vállalás és személyes tanulságok.</p>
+            <div class="actions-row">
+              <button class="btn btn-primary" data-action="start">
+                Induljon a játék <span aria-hidden="true">→</span>
+              </button>
+            </div>
+          </div>
+          <div class="hero-visual-container">
+            <div class="hero-halo"></div>
+            ${introCoins()}
+            <div class="hero-center-badge">
+              <span class="num">24</span>
+              <span class="lbl">Időzseton</span>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function categoryRow(c, list) {
+      let n = count(list, c.id);
+      let locked = state.page === 2 && c.group === 'red' && !state.unlockRed;
+      return `
+        <div class="cat-card ${state.selected === c.id ? 'selected' : ''} ${locked ? 'locked' : ''}">
+          <button class="cat-select-btn" data-select="${c.id}" aria-pressed="${state.selected === c.id}" title="${escapeHtml(c.name)} kiválasztása">
+            <span class="cat-swatch" style="--color:${c.color}"></span>
+            <span class="cat-name-text">${escapeHtml(c.name)}</span>
+          </button>
+          <div class="cat-controls">
+            <button class="btn-counter" data-dec="${c.id}" ${locked || n === 0 ? 'disabled' : ''} aria-label="${escapeHtml(c.name)}: egy óra elvétele">−</button>
+            <span class="counter-num">${n}</span>
+            <button class="btn-counter" data-inc="${c.id}" ${locked || countFree(list) === 0 ? 'disabled' : ''} aria-label="${escapeHtml(c.name)}: egy óra hozzáadása">+</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function coinGrid(list) {
+      return list.map((t, i) => {
+        let cat = t.cat ? categoryMap[t.cat] : null;
+        let ss = t.source === 'red' && cat && cat.group === 'green';
+        let locked = state.page === 2 && cat && cat.group === 'red' && !state.unlockRed;
+        return `
+          <button class="coin-btn ${cat ? 'assigned' : ''} ${ss ? 'stolen' : ''} ${locked ? 'locked' : ''}"
+                  data-token="${i}"
+                  style="--c:${cat ? cat.color : '#E2E8F0'}"
+                  title="${cat ? escapeHtml(cat.name) + (ss ? ' – kötött időből' : '') : 'Szabad zseton – kattints a hozzáadáshoz'}"
+                  aria-label="${i + 1}. zseton: ${cat ? escapeHtml(cat.name) : 'szabad'}${ss ? ', eredetileg kötött idő' : ''}">
+            ${cat ? cat.symbol : i + 1}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function legend(list) {
+      return CATEGORIES.filter(c => count(list, c.id) > 0).map(c => `
+        <div class="legend-row">
+          <span class="legend-left">
+            <span class="cat-swatch" style="--color:${c.color}"></span>
+            ${escapeHtml(c.name)}
+          </span>
+          <strong>${count(list, c.id)} ó</strong>
+        </div>
+      `).join('');
+    }
+
+    function renderWorkbench() {
+      let ideal = state.page === 2;
+      let list = tokens();
+      let free = countFree(list);
+      let used = 24 - free;
+      let st = ideal ? stolen(list) : 0;
+
+      const title = ideal ? 'Az én ideális iskolai napom' : 'A valóság – így telik egy iskolai napom';
+      const subtitle = ideal
+        ? 'A piros, kötött időt áthoztuk a valós napodból. A zöld időt szabadon újratervezheted; szükség esetén a piros is feloldható.'
+        : 'Gondolj egy átlagos tanítási napra! Előbb a kötött időt (iskola, utazás), majd a többi órát oszd be a valós szokásaid szerint.';
+
+      let lockBox = ideal ? `
+        <div class="lockbar-card">
+          <div>
+            <strong>🔒 Kötött idő átvéve</strong>
+            <p>A piros zsetonok alapból rögzítve vannak. Ha szükséges, feloldhatod őket.</p>
+          </div>
+          <label class="toggle-switch">
+            <input id="unlock" type="checkbox" ${state.unlockRed ? 'checked' : ''}> Feloldom
+          </label>
+        </div>
+        ${state.unlockRed ? `
+          <div class="pastel-card warning">
+            <div class="eyebrow-mini">Módszertani jelzés</div>
+            <p>A pirosból a zöld kategóriákba kerülő zsetonokat a játék „lopott időként” (piros szegéllyel) jelöli. A „lopott idő” a játék szemléltető elnevezése; nem automatikus erkölcsi ítélet.</p>
+          </div>
+        ` : ''}
+      ` : '';
+
+      let notice = state.notice ? `
+        <div class="pastel-card warning" role="status">
+          <p>${escapeHtml(state.notice)}</p>
+        </div>
+      ` : '';
+
+      return `
+        <section>
+          <div class="screen-header">
+            <div>
+              <div class="screen-eyebrow">${ideal ? 'Második időkerék' : 'Első időkerék'}</div>
+              <h1 class="screen-title">${title}</h1>
+              <p class="screen-subtitle">${subtitle}</p>
+            </div>
+            <div class="stage-badge">${ideal ? 'Újratervezés' : 'Valóság'} · 24 óra</div>
+          </div>
+
+          <div class="workbench-grid">
+            <div class="panel-card">
+              <h2 class="panel-title">Oszd ki a zsetonokat!</h2>
+              <p class="panel-desc">Válassz kategóriát, majd nyomj + jelet vagy kattints egy szabad zsetonra.</p>
+
+              <div class="budget-box ${free === 0 ? 'complete' : 'warning'}">
+                <span class="budget-num">${free}</span>
+                <div class="budget-info">
+                  <strong>${free === 0 ? 'Minden óra a helyére került!' : 'Még kiosztható zseton'}</strong>
+                  <span>${used} / 24 zseton beosztva · 1 zseton = 1 óra</span>
+                </div>
+              </div>
+
+              ${lockBox}
+
+              <div class="cat-group-label red-group">
+                <span>🔴 Piros · Kötött idő</span>
+              </div>
+              <div class="category-grid">
+                ${CATEGORIES.filter(c => c.group === 'red').map(c => categoryRow(c, list)).join('')}
+              </div>
+
+              <div class="cat-group-label green-group">
+                <span>🟢 Zöld · Beosztható idő</span>
+              </div>
+              <div class="category-grid">
+                ${CATEGORIES.filter(c => c.group === 'green').map(c => categoryRow(c, list)).join('')}
+              </div>
+
+              <p class="source-citation" style="margin-top:1rem;">A zöld szín nem azt jelenti, hogy a tevékenység elhagyható (pl. az alvás alapvető szükséglet), hanem azt, hogy mekkora mozgástered van az időtartam megválasztásában.</p>
+
+              ${notice}
+
+              <div class="actions-row">
+                <button class="btn btn-secondary" data-action="back">← Vissza</button>
+                <button class="btn btn-primary" data-action="finish" ${free ? 'disabled' : ''}>
+                  ${ideal ? 'Kérek összehasonlítást' : 'Elkészült az időkerékem'} <span aria-hidden="true">→</span>
+                </button>
+              </div>
+            </div>
+
+            <aside class="panel-card sticky-panel">
+              <div class="screen-eyebrow">${ideal ? 'Ideális időkerék' : 'Valós időkerék'}</div>
+              <h2 class="panel-title">24 szelet · 24 óra</h2>
+              <div class="wheel-holder">
+                ${wheelSvg(list, ideal ? 'Ideális időkerék' : 'Valós időkerék')}
+              </div>
+              <p style="text-align:center; font-size:0.85rem; color:var(--color-text-muted);">
+                ${free ? `${free} üres szelet vár még beosztásra` : 'Készen van a 24 szeletes időkerék!'}
+              </p>
+
+              <div class="cat-group-label" style="border:none; margin-top:1rem;">A 24 zsetonod</div>
+              <div class="coin-grid">${coinGrid(list)}</div>
+
+              ${ideal && st ? `
+                <div class="pastel-card warning" style="margin-top:0.85rem;">
+                  <strong>${st} „lopott” zseton</strong>
+                  <p style="font-size:0.82rem; margin-top:0.2rem;">Ennyi eredetileg kötött órát osztottál át zöld tevékenységre. Ezeket piros szegély jelöli.</p>
+                </div>
+              ` : ''}
+
+              <div class="cat-group-label" style="border:none; margin-top:1rem;">Jelmagyarázat</div>
+              <div class="legend-grid">
+                ${legend(list) || '<p class="source-citation">Még nincs kiosztott idő.</p>'}
+              </div>
+            </aside>
+          </div>
+        </section>
+      `;
+    }
+
+    function diffText(d) {
+      return d > 0 ? `+${d} ó` : d < 0 ? `${d} ó` : '–';
+    }
+
+    function comparisonRows() {
+      return CATEGORIES.map(c => {
+        let a = count(state.real, c.id);
+        let b = count(state.ideal, c.id);
+        let delta = b - a;
+        return `
+          <div class="comparison-row">
+            <div class="comp-name">
+              <span class="cat-swatch" style="--color:${c.color}"></span>
+              ${escapeHtml(c.name)}
+            </div>
+            <div class="comp-bars">
+              <div class="bar-track-row">
+                <span>Most</span>
+                <div class="bar-track-bg">
+                  <div class="bar-fill-elem" style="width:${100 * a / 12}%; --c:${c.color}"></div>
+                </div>
+              </div>
+              <div class="bar-track-row">
+                <span>Terv</span>
+                <div class="bar-track-bg">
+                  <div class="bar-fill-elem ideal-fill" style="width:${100 * b / 12}%; --c:${c.color}"></div>
+                </div>
+              </div>
+            </div>
+            <div class="comp-delta ${delta > 0 ? 'plus' : delta < 0 ? 'minus' : ''}">${diffText(delta)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getInsights() {
+      const real = state.real, ideal = state.ideal, items = [];
+      const d = id => count(ideal, id) - count(real, id);
+      const st = stolen(ideal);
+
+      if (st > 0) {
+        items.push({
+          type: 'guidance',
+          tag: 'Szabadság és felelősség',
+          title: `${st} kötött órát más célra fordítanál`,
+          verse: 'Ef 5,15–16 · 1Kor 10,23–24',
+          body: 'Ezek a zsetonok a valóságban kötelezettséghez tartoztak. Az átcsoportosítás oka számít: egy valóban megváltozott helyzet nem ugyanaz, mint egy vállalt feladat elkerülése. Kit érintene a döntésed, és milyen következményekkel járhatna?',
+          question: 'Ha ezt a változtatást holnap megtennéd, kivel kellene előbb egyeztetned?',
+          source: 'XI. református tanterv, 10. és 18. PDF-old.; Napjaink etikai kihívásai, 18–19. o.'
+        });
+      }
+
+      if (d('sleep') > 0) {
+        items.push({
+          type: 'verse',
+          tag: 'Pihenés és feltöltődés',
+          title: `${d('sleep')} órával több alvást tervezel`,
+          verse: '2Móz 20,8–11 · Mk 2,27',
+          body: 'Az alvást a tankönyv a passzív rekreáció példájaként említi. A munka és a pihenés egészséges váltakozása fontos; a pihenés nem pusztán a megmaradó idő kitöltése.',
+          question: 'Melyik jelenlegi elfoglaltságodból tudnád ezt az időt reálisan felszabadítani?',
+          source: 'Napjaink etikai kihívásai, 15. és 17–18. o.'
+        });
+      } else if (d('sleep') < 0) {
+        items.push({
+          type: 'verse',
+          tag: 'A pihenés helye',
+          title: `${Math.abs(d('sleep'))} órával kevesebb alvást tervezel`,
+          verse: '2Móz 20,8–11 · Mk 2,27',
+          body: 'Az alvás idejét szabadabban osztod be, de a pihenés alapvető emberi szükséglet. A tankönyv hangsúlyozza, hogy a tartós pihenéshiány kimerüléshez vezethet.',
+          question: 'A felszabadított idő nyeresége arányban állhat azzal, amit a pihenésből elveszel?',
+          source: 'Napjaink etikai kihívásai, 15., 17–18. o.'
+        });
+      }
+
+      if (d('phone') !== 0) {
+        items.push({
+          type: 'reflection',
+          tag: 'Digitális szokások és önuralom',
+          title: d('phone') < 0 ? `${Math.abs(d('phone'))} órával kevesebb képernyőidőt választanál` : `${d('phone')} órával több képernyőidőt választanál`,
+          verse: '1Kor 6,12',
+          body: 'A digitális eszközök tanulásra, kapcsolattartásra és szórakozásra is szolgálnak. A hosszú képernyőidő önmagában nem bizonyít függőséget; a cél, a következmények és az önkontroll a lényeg.',
+          question: 'Te választod meg, mikor fejezed be, vagy nehéz abbahagyni?',
+          source: 'Keresztyén etika a digitális világban, 2–3. o.; Digitális Lelkiismeret, 33–37. o.'
+        });
+      }
+
+      if (d('family') !== 0 || d('friends') !== 0) {
+        items.push({
+          type: 'verse',
+          tag: 'Kapcsolatok és felebaráti felelősség',
+          title: (d('family') + d('friends')) > 0 ? 'Több időt szánnál a kapcsolataidra' : 'A kapcsolatokra szánt idődet is átrendeznéd',
+          verse: '1Kor 10,23–24 · Mt 22,39',
+          body: 'A keresztyén szabadság nemcsak azt vizsgálja, nekem mi jó, hanem a másik ember javát is. A tankönyv a stabil emberi kapcsolatokat az egészséges életmód részeként említi.',
+          question: 'Ki az, akire szeretnél tudatosabban figyelni a következő iskolai napon?',
+          source: 'Napjaink etikai kihívásai, 19. o.; XI. református tanterv, 17–18. o.'
+        });
+      }
+
+      if (d('rest') !== 0 || d('sport') !== 0) {
+        items.push({
+          type: 'guidance',
+          tag: 'Rekreáció és kiegyensúlyozottság',
+          title: 'Más arányban osztanád be a kikapcsolódást',
+          verse: '2Móz 20,8–11 · Mk 2,27',
+          body: 'A rekreációnak több formája van: mozgás, játék, művelődés, kikapcsolódás és nyugalom. A tankönyv szerint az a fontos, hogy valóban feltöltsön, és ne ártson neked vagy másoknak.',
+          question: 'Az általad választott időtöltés után inkább feltöltődsz, vagy még fáradtabbnak érzed magad?',
+          source: 'Napjaink etikai kihívásai, 14–19. o.'
+        });
+      }
+
+      if (d('study') !== 0) {
+        items.push({
+          type: 'verse',
+          tag: 'Tanulás és a tevékenységek egyensúlya',
+          title: d('study') > 0 ? `${d('study')} órával több tanulást tervezel` : `${Math.abs(d('study'))} órával kevesebb tanulást tervezel`,
+          verse: 'Ef 5,15–16 · Kol 3,17',
+          body: 'A munka és a tanulás nem pusztán kényszer; ugyanakkor a túlzott teljesítményre törekvés a pihenés rovására mehet.',
+          question: 'Mi segítene abban, hogy a feladataidra és a pihenésre is jusson hely?',
+          source: 'Tanári segédanyag, 6–7. o.; XI. református tanterv, 18. o.'
+        });
+      }
+
+      if (d('faith') !== 0) {
+        items.push({
+          type: 'verse',
+          tag: 'Hit és elcsendesedés',
+          title: d('faith') > 0 ? 'Több időt hagynál a hitnek és az elcsendesedésnek' : 'Átgondolnád az elcsendesedés helyét',
+          verse: 'Zsolt 23 · Zsolt 25 · Ef 5,15–16',
+          body: 'A XI. osztályos tanterv az Istenben való megpihenést és a döntésekhez kért vezetést is megjeleníti.',
+          question: 'Hogyan lehetne az imádság vagy a csend a mindennapi döntéseid része?',
+          source: 'XI. református tanterv, 10. és 17–18. o.'
+        });
+      }
+
+      if (d('other') !== 0) {
+        items.push({
+          type: 'reflection',
+          tag: 'Egyéb tevékenységek',
+          title: 'Az „egyéb” időd is változna',
+          verse: 'Ef 5,15–16',
+          body: 'Az időkerék nem tudja helyetted megmondani, mi tartozik az „egyéb” kategóriába. Az életkörülmények sokfélék.',
+          question: 'Mi található valójában az „egyéb” óráid mögött?',
+          source: 'Napjaink etikai kihívásai, 15. o.'
+        });
+      }
+
+      if (!items.length) {
+        items.push({
+          type: 'guidance',
+          tag: 'Önismeret és felelős döntés',
+          title: 'A két napodban nincs nagy változás',
+          verse: 'Ef 5,15–16 · 1Kor 6,12',
+          body: 'A két időkerék önmagában nem ad erkölcsi osztályzatot. A tanári segédanyag arra hív, hogy a tevékenységeinket összefüggéseikben nézzük.',
+          question: 'Mi az az egy szokásod, amelyet most is szívesen megtartanál, és miért?',
+          source: 'Napjaink etikai kihívásai – Tanári segédanyag, 6–9. o.'
+        });
+      }
+
       return items;
     }
-    function insights(){const items=getInsights();const card=x=>`<article class="reflection-card"><div class="eyebrow">${escapeHtml(x.tag)}</div><h3>${escapeHtml(x.title)}</h3><span class="scripture">Bibliai iránytű: ${escapeHtml(x.verse)}</span><p>${escapeHtml(x.body)}</p><p><strong>Kérdés:</strong> ${escapeHtml(x.question)}</p><p class="smallmuted"><strong>Forrás:</strong> ${escapeHtml(x.source)}</p></article>`;const first=items.slice(0,3).map(card).join('');const rest=items.slice(3);return first+(rest.length?`<details class="more-reflections"><summary>További ${rest.length} személyes felismerés és forrás</summary>${rest.map(card).join('')}</details>`:'');}
-    function renderResults(){let diff=CATEGORIES.filter(c=>count(state.real,c.id)!==count(state.ideal,c.id)).length,st=stolen(state.ideal);let gains=CATEGORIES.filter(c=>count(state.ideal,c.id)>count(state.real,c.id)).reduce((sum,c)=>sum+count(state.ideal,c.id)-count(state.real,c.id),0);return `<section class="screen"><div class="screen-header"><div><div class="eyebrow">Negyedik képernyő · önreflexió</div><h1 class="display">Mit mutat a két napod?</h1><p class="subtitle">Itt nem jegyet kapsz. Az időkerék nem minősít téged: azt segít megérteni, hol van valódi mozgástered és milyen következményei lehetnek a döntéseidnek.</p></div><div class="stage-pill">Összehasonlítás</div></div><div class="panel panel-pad" style="margin-bottom:22px"><div class="result-wheels"><div><h3>A valós iskolai napom</h3><div class="wheel-holder">${wheelSvg(state.real,'Valós iskolai nap')}</div></div><div><h3>Az én ideális iskolai napom</h3><div class="wheel-holder">${wheelSvg(state.ideal,'Ideális iskolai nap')}</div></div></div><div class="summary-stats"><div class="stat"><strong>${diff}</strong><span>megváltoztatott kategória</span></div><div class="stat"><strong>${gains}</strong><span>átcsoportosított óra</span></div><div class="stat"><strong>${st}</strong><span>átcsoportosított kötött idő</span></div></div></div><div class="results-grid"><div><div class="panel comparison"><h2>Óráról órára</h2><p class="smallmuted">A valós és a tervezett nap különbsége kategóriánként.</p><div class="comparison-key"><span><i class="keybox"></i> Valós</span><span><i class="keybox outline"></i> Ideális</span></div>${comparisonRows()}<div class="notice ${st?'warning':'good'}">${st?`<strong>${st} kötött órát áthelyeztél.</strong> A változtatás eredetét külön jeleztük, mert nem mindegy, milyen kötelezettség rovására történik a pihenés vagy a szórakozás.`:'<strong>Nem vettél el időt a piros kötelezettségeidből.</strong> A változtatásaid a szabadabban beosztható időn belül maradtak.'}</div></div><div class="panel panel-pad commitment"><h2>A saját döntésem</h2><p class="subtitle">Nem muszáj egyetlen zsetont áthelyezned: annyi órát tervezhetsz át, amennyit reálisnak tartasz. Írd le, mit és hogyan szeretnél megváltoztatni!</p><label for="commitment" style="margin-top:16px">Mit próbálsz ki a következő iskolai napon?</label><textarea id="commitment" placeholder="Például: Kevesebbet görgetek este, és korábban lefekszem.">${escapeHtml(state.commitment)}</textarea><div class="actions"><button class="btn primary" data-action="download">↓ Eredményem mentése</button><button class="btn subtle" data-action="back">← Ideális nap módosítása</button><button class="btn warning small" data-action="reset">Újrakezdés</button></div><p class="tiny">A letöltés helyben készül. Az adataidat a weboldal nem küldi el sehova.</p></div></div><aside class="panel panel-pad"><div class="eyebrow">Személyes felismerések</div><h2>Bibliai iránytű</h2><p class="smallmuted" style="margin-bottom:15px">A visszajelzések a két időbeosztás eltéréseire épülnek. A bibliaszövegeket a feltöltött források hivatkozásai alapján jelöljük; nincsenek erkölcsi ponthatárok.</p><div class="reflection">${insights()}</div><div class="section-help" style="margin-top:16px">Az idő bölcs és felelős felhasználása<br><strong>Ef 5,15–16 · XI. osztályos tantervi igehely</strong></div></aside></div></section>`;}
-    function render(){stepNavigation();$('app').innerHTML=state.page===0?renderIntro():state.page===3?renderResults():renderWorkbench();}
-    function resultText(){let a=['IDŐZSETON – Mire költöd az életedet?','Egy átlagos iskolai nap – személyes összehasonlítás','','Kategória | Valóság | Ideális | Eltérés'];for(let c of CATEGORIES){let r=count(state.real,c.id),i=count(state.ideal,c.id);a.push(`${c.name} | ${r} ó | ${i} ó | ${i-r>=0?'+':''}${i-r} ó`);}a.push('','Kötött időből átcsoportosítva: '+stolen(state.ideal)+' óra','','Forrásalapú reflexiók:');for(const it of getInsights()){a.push('',it.title,'Igehely: '+it.verse,it.body,'Önreflexió: '+it.question,'Forrás: '+it.source);}a.push('','Személyes vállalás:',state.commitment.trim()||'(nincs megadva)','','A két időkerék nem erkölcsi osztályzat.');return a.join('\n');}
-    function downloadText(){const blob=new Blob(['\ufeff'+resultText()],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='idozseton-szemelyes-eredmeny.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),2500);}
-    document.addEventListener('click',event=>{const btn=event.target.closest('[data-action],[data-inc],[data-dec],[data-token],[data-select],[data-page]');if(!btn)return;
-      if(btn.dataset.page!==undefined){setPage(Number(btn.dataset.page));return;}
-      if(btn.dataset.select){state.selected=btn.dataset.select;state.notice='';render();return;}
-      if(btn.dataset.inc){addToken(btn.dataset.inc);return;}
-      if(btn.dataset.dec){removeToken(btn.dataset.dec);return;}
-      if(btn.dataset.token!==undefined){let t=tokens()[Number(btn.dataset.token)];if(!t)return;if(t.cat)removeToken(t.cat,t.id);else addToken(state.selected);return;}
-      switch(btn.dataset.action){case'home':setPage(0);break;case'start':advance(1);break;case'back':setPage(state.page-1);break;case'finish':if(countFree(tokens())){state.notice='Előbb oszd ki mind a 24 zsetont.';render();return;}if(state.page===1){prepareIdeal();advance(2)}else if(state.page===2){advance(3)}break;case'download':downloadText();break;case'reset':if(confirm('Újrakezded a játékot? A jelenlegi zsetonbeosztások elvesznek.')){state.page=0;state.reached=0;state.selected='school';state.unlockRed=false;state.notice='';state.commitment='';state.ideal=null;state.real=Array.from({length:24},(_,id)=>({id,cat:null,source:null,origin:null}));render();window.scrollTo(0,0);}break;}
+
+    function renderInsightsCards() {
+      const items = getInsights();
+      const card = x => `
+        <article class="pastel-card ${x.type || 'guidance'}">
+          <div class="eyebrow-mini">${escapeHtml(x.tag)}</div>
+          <h3>${escapeHtml(x.title)}</h3>
+          <span class="scripture-tag">Bibliai iránytű: ${escapeHtml(x.verse)}</span>
+          <p>${escapeHtml(x.body)}</p>
+          <div class="reflection-question">Kérdés: ${escapeHtml(x.question)}</div>
+          <div class="source-citation">Forrás: ${escapeHtml(x.source)}</div>
+        </article>
+      `;
+
+      const first = items.slice(0, 3).map(card).join('');
+      const rest = items.slice(3);
+      return first + (rest.length ? `
+        <details class="details-accordion">
+          <summary>További ${rest.length} személyes felismerés és forrás</summary>
+          ${rest.map(card).join('')}
+        </details>
+      ` : '');
+    }
+
+    function renderResults() {
+      let diff = CATEGORIES.filter(c => count(state.real, c.id) !== count(state.ideal, c.id)).length;
+      let st = stolen(state.ideal);
+      let gains = CATEGORIES.filter(c => count(state.ideal, c.id) > count(state.real, c.id))
+                            .reduce((sum, c) => sum + count(state.ideal, c.id) - count(state.real, c.id), 0);
+
+      return `
+        <section>
+          <div class="screen-header">
+            <div>
+              <div class="screen-eyebrow">Negyedik képernyő · Önreflexió</div>
+              <h1 class="screen-title">Mit mutat a két napod?</h1>
+              <p class="screen-subtitle">Itt nem jegyet kapsz. Az időkerék nem minősít téged: azt segít megérteni, hol van valódi mozgástered és milyen következményei lehetnek a döntéseidnek.</p>
+            </div>
+            <div class="stage-badge">Összehasonlítás</div>
+          </div>
+
+          <div class="panel-card" style="margin-bottom: 1.5rem;">
+            <div class="wheels-comparison-container">
+              <div class="wheel-card-box">
+                <h3>A valós iskolai napom</h3>
+                <div class="wheel-holder">${wheelSvg(state.real, 'Valós iskolai nap')}</div>
+              </div>
+              <div class="wheel-card-box">
+                <h3>Az én ideális iskolai napom</h3>
+                <div class="wheel-holder">${wheelSvg(state.ideal, 'Ideális iskolai nap')}</div>
+              </div>
+            </div>
+
+            <div class="summary-stats-grid">
+              <div class="stat-card">
+                <span class="num">${diff}</span>
+                <span class="label">módosult kategória</span>
+              </div>
+              <div class="stat-card">
+                <span class="num">${gains}</span>
+                <span class="label">átcsoportosított óra</span>
+              </div>
+              <div class="stat-card">
+                <span class="num">${st}</span>
+                <span class="label">átcsoportosított kötött idő</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="results-grid">
+            <div>
+              <div class="panel-card">
+                <h2 class="panel-title">Óráról órára</h2>
+                <p class="panel-desc">A valós és a tervezett nap különbsége kategóriánként.</p>
+
+                <div class="comparison-list">
+                  ${comparisonRows()}
+                </div>
+
+                <div class="pastel-card ${st ? 'warning' : 'good'}" style="margin-top:1.25rem;">
+                  ${st ? `
+                    <strong>${st} kötött órát áthelyeztél.</strong>
+                    <p>A változtatás eredetét külön jeleztük, mert nem mindegy, milyen kötelezettség rovására történik a pihenés vagy a szórakozás.</p>
+                  ` : `
+                    <strong>Nem vettél el időt a piros kötelezettségeidből.</strong>
+                    <p>A változtatásaid a szabadabban beosztható időn belül maradtak.</p>
+                  `}
+                </div>
+              </div>
+
+              <div class="panel-card commitment-box">
+                <h2 class="panel-title">A saját döntésem</h2>
+                <p class="panel-desc">Nem muszáj egyetlen zsetont áthelyezned: annyi órát tervezhetsz át, amennyit reálisnak tartasz. Írd le, mit és hogyan szeretnél megváltoztatni!</p>
+
+                <label for="commitment">Mit próbálsz ki a következő iskolai napon?</label>
+                <textarea id="commitment" placeholder="Például: Kevesebbet görgetek este, és korábban lefekszem.">${escapeHtml(state.commitment)}</textarea>
+
+                <div class="actions-row">
+                  <button class="btn btn-primary" data-action="download">↓ Eredményem mentése (UTF-8)</button>
+                  <button class="btn btn-secondary" data-action="back">← Ideális nap módosítása</button>
+                  <button class="btn btn-warning btn-sm" data-action="reset">Újrakezdés</button>
+                </div>
+                <p class="source-citation" style="margin-top:0.75rem;">A letöltés helyben készül UTF-8 kódolású szövegfájlként. Az adataidat a weboldal nem küldi el sehova.</p>
+              </div>
+            </div>
+
+            <aside class="panel-card">
+              <div class="screen-eyebrow">Személyes felismerések</div>
+              <h2 class="panel-title">Bibliai iránytű és etika</h2>
+              <p class="panel-desc">A visszajelzések a két időbeosztás eltéréseire épülnek a tantervi források alapján.</p>
+
+              <div>
+                ${renderInsightsCards()}
+              </div>
+
+              <div class="pastel-card verse" style="margin-top: 1rem;">
+                <div class="eyebrow-mini">Igei útravaló</div>
+                <p><strong>„Nézzétek azért jól, hogyan éltek: ne oktalanul, hanem bölcsen, kihasználva az alkalmas időt...”</strong></p>
+                <div class="scripture-tag">Ef 5,15–16 · XI. osztályos tantervi igehely</div>
+              </div>
+            </aside>
+          </div>
+        </section>
+      `;
+    }
+
+    function render() {
+      renderStepsNav();
+      const app = $('app');
+      if (!app) return;
+      app.innerHTML = state.page === 0 ? renderIntro() : state.page === 3 ? renderResults() : renderWorkbench();
+    }
+
+    function resultText() {
+      let a = [
+        'IDŐZSETON – Mire költöd az életedet?',
+        'Egy átlagos iskolai nap – személyes összehasonlítás',
+        '',
+        'Kategória | Valóság | Ideális | Eltérés'
+      ];
+      for (let c of CATEGORIES) {
+        let r = count(state.real, c.id);
+        let i = count(state.ideal, c.id);
+        a.push(`${c.name} | ${r} ó | ${i} ó | ${i - r >= 0 ? '+' : ''}${i - r} ó`);
+      }
+      a.push('', 'Kötött időből átcsoportosítva: ' + stolen(state.ideal) + ' óra', '', 'Forrásalapú reflexiók:');
+      for (const it of getInsights()) {
+        a.push('', it.title, 'Igehely: ' + it.verse, it.body, 'Önreflexió: ' + it.question, 'Forrás: ' + it.source);
+      }
+      a.push('', 'Személyes vállalás:', state.commitment.trim() || '(nincs megadva)', '', 'A két időkerék nem erkölcsi osztályzat.');
+      return a.join('\n');
+    }
+
+    function downloadText() {
+      const blob = new Blob(['\ufeff' + resultText()], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'idozseton-szemelyes-eredmeny.txt';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 2500);
+    }
+
+    document.addEventListener('click', event => {
+      const btn = event.target.closest('[data-action],[data-inc],[data-dec],[data-token],[data-select],[data-page]');
+      if (!btn) return;
+
+      if (btn.dataset.page !== undefined) {
+        setPage(Number(btn.dataset.page));
+        return;
+      }
+      if (btn.dataset.select) {
+        state.selected = btn.dataset.select;
+        state.notice = '';
+        render();
+        return;
+      }
+      if (btn.dataset.inc) {
+        addToken(btn.dataset.inc);
+        return;
+      }
+      if (btn.dataset.dec) {
+        removeToken(btn.dataset.dec);
+        return;
+      }
+      if (btn.dataset.token !== undefined) {
+        let t = tokens()[Number(btn.dataset.token)];
+        if (!t) return;
+        if (t.cat) removeToken(t.cat, t.id);
+        else addToken(state.selected);
+        return;
+      }
+
+      switch (btn.dataset.action) {
+        case 'home':
+          setPage(0);
+          break;
+        case 'start':
+          advance(1);
+          break;
+        case 'back':
+          setPage(state.page - 1);
+          break;
+        case 'finish':
+          if (countFree(tokens())) {
+            state.notice = 'Előbb oszd ki mind a 24 zsetont.';
+            render();
+            return;
+          }
+          if (state.page === 1) {
+            prepareIdeal();
+            advance(2);
+          } else if (state.page === 2) {
+            advance(3);
+          }
+          break;
+        case 'download':
+          downloadText();
+          break;
+        case 'reset':
+          if (confirm('Újrakezded a játékot? A jelenlegi zsetonbeosztások elvesznek.')) {
+            state.page = 0;
+            state.reached = 0;
+            state.selected = 'school';
+            state.unlockRed = false;
+            state.notice = '';
+            state.commitment = '';
+            state.ideal = null;
+            state.real = Array.from({ length: 24 }, (_, id) => ({ id, cat: null, source: null, origin: null }));
+            render();
+            window.scrollTo(0, 0);
+          }
+          break;
+      }
     });
-    document.addEventListener('change',event=>{if(event.target.id==='unlock'){state.unlockRed=event.target.checked;state.notice='';render();}});
-    document.addEventListener('input',event=>{if(event.target.id==='commitment')state.commitment=event.target.value;});
+
+    document.addEventListener('change', event => {
+      if (event.target.id === 'unlock') {
+        state.unlockRed = event.target.checked;
+        state.notice = '';
+        render();
+      }
+    });
+
+    document.addEventListener('input', event => {
+      if (event.target.id === 'commitment') {
+        state.commitment = event.target.value;
+      }
+    });
+
+    // Initialize
     render();
   </script>
 </body>
