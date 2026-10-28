@@ -64,18 +64,18 @@
 
     // 12 Functional Time Categories
     const CATEGORIES = [
-      { id: 'school', name: 'Iskola / munkahely', group: 'red', color: '#E53E3E', symbol: 'I' },
-      { id: 'travel', name: 'Utazás', group: 'red', color: '#DD6B20', symbol: 'U' },
-      { id: 'duty', name: 'Egyéb kötelesség', group: 'red', color: '#D69E2E', symbol: 'K' },
-      { id: 'sleep', name: 'Alvás', group: 'green', color: '#319795', symbol: 'A' },
-      { id: 'study', name: 'Tanulás', group: 'green', color: '#3182CE', symbol: 'T' },
-      { id: 'phone', name: 'Telefon / internet', group: 'green', color: '#00B5D8', symbol: 'N' },
-      { id: 'family', name: 'Család', group: 'green', color: '#38A169', symbol: 'C' },
-      { id: 'friends', name: 'Barátok', group: 'green', color: '#805AD5', symbol: 'B' },
-      { id: 'sport', name: 'Sport / hobbi', group: 'green', color: '#D69E2E', symbol: 'S' },
-      { id: 'faith', name: 'Hit / elcsendesedés', group: 'green', color: '#319795', symbol: 'H' },
-      { id: 'rest', name: 'Pihenés / szórakozás', group: 'green', color: '#3182CE', symbol: 'P' },
-      { id: 'other', name: 'Egyéb', group: 'green', color: '#718096', symbol: 'E' }
+      { id: 'school', name: 'Iskola / munkahely', group: 'red', color: '#ed6a78', symbol: 'I' },
+      { id: 'travel', name: 'Utazás', group: 'red', color: '#cf5c6c', symbol: 'U' },
+      { id: 'duty', name: 'Egyéb kötelesség', group: 'red', color: '#f0919a', symbol: 'K' },
+      { id: 'sleep', name: 'Alvás', group: 'green', color: '#80dfc0', symbol: 'A' },
+      { id: 'study', name: 'Tanulás', group: 'green', color: '#38b9ae', symbol: 'T' },
+      { id: 'phone', name: 'Telefon / internet', group: 'green', color: '#259993', symbol: 'N' },
+      { id: 'family', name: 'Család', group: 'green', color: '#9adfb5', symbol: 'C' },
+      { id: 'friends', name: 'Barátok', group: 'green', color: '#58bc93', symbol: 'B' },
+      { id: 'sport', name: 'Sport / hobbi', group: 'green', color: '#8fd18b', symbol: 'S' },
+      { id: 'faith', name: 'Hit / elcsendesedés', group: 'green', color: '#b9dda0', symbol: 'H' },
+      { id: 'rest', name: 'Pihenés / szórakozás', group: 'green', color: '#4eaa84', symbol: 'P' },
+      { id: 'other', name: 'Egyéb', group: 'green', color: '#80b9b0', symbol: 'E' }
     ];
 
     const categoryMap = Object.fromEntries(CATEGORIES.map(x => [x.id, x]));
@@ -134,14 +134,14 @@
       if (!cat) return;
 
       if (state.page === 2 && cat.group === 'red' && !state.unlockRed) {
-        state.notice = 'A piros idő alapból kötött. A módosításához előbb kapcsold be a feloldást.';
+        state.notice = 'A piros idő alapból kötött. Előbb kapcsold be a módosítást.';
         render();
         return;
       }
 
       const free = list.filter(t => !t.cat);
       if (!free.length) {
-        state.notice = 'Minden időzsetont kiosztottál (24 óra). Ha módosítanál, előbb vegyél vissza egyet.';
+        state.notice = 'Minden időzsetont kiosztottál. Ha módosítanál, előbb vegyél vissza egyet.';
         render();
         return;
       }
@@ -159,7 +159,7 @@
       if (!cat) return;
 
       if (state.page === 2 && cat.group === 'red' && !state.unlockRed) {
-        state.notice = 'A piros idő alapból rögzített. A módosításhoz előbb oldd fel.';
+        state.notice = 'A piros idő rögzített. A módosításhoz előbb oldd fel.';
         render();
         return;
       }
@@ -189,7 +189,7 @@
     }
 
     function renderStepsNav() {
-      const labels = ['Címlap', 'Valós nap', 'Ideális nap', 'Összehasonlítás'];
+      const labels = ['Címlap', 'Valóság', 'Ideális', 'Összevetés'];
       const nav = $('steps-nav');
       if (!nav) return;
 
@@ -233,11 +233,11 @@
         return `
           <g>
             <title>${escapeHtml(label)}</title>
-            <path d="${arcPath(170, 170, 70, 148, a, b)}" fill="${fill}" stroke="#FFFFFF" stroke-width="2"/>
-            ${isStolen ? `<path d="${arcPath(170, 170, 133, 146, a + 1.2, b - 1.2)}" fill="#C53030" stroke="#FEB2B2" stroke-width="1.5"/>` : ''}
+            <path d="${arcPath(170, 170, 70, 148, a, b)}" fill="${fill}" stroke="#142237" stroke-width="2"/>
+            ${isStolen ? `<path d="${arcPath(170, 170, 133, 146, a + 1.2, b - 1.2)}" fill="#a8234e" stroke="#ffd5d8" stroke-width="1.5"/>` : ''}
             <text x="${(170 + 109 * Math.cos((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
                   y="${(174 + 109 * Math.sin((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
-                  fill="${t.cat ? '#FFFFFF' : '#64748B'}"
+                  fill="${t.cat ? '#132836' : '#8195ac'}"
                   text-anchor="middle" font-size="11" font-weight="800">${i + 1}</text>
           </g>
         `;
@@ -267,11 +267,11 @@
       return `
         <section class="hero-card">
           <div class="hero-text-content">
-            <span class="hero-badge">XI. Osztály · Keresztyén Etika</span>
+            <span class="hero-badge">Interaktív keresztyén etikai játék · XI. osztály</span>
             <h1 class="hero-title">IDŐZSETON</h1>
             <h2 class="hero-subtitle">Mire költöd az életedet?</h2>
-            <p class="hero-lead">Minden iskolai napod 24 egyórányi időzsetonból áll. Egy részéről mások dönteneak, a többit te osztod be. De vajon az időd beosztása azt tükrözi, ami valóban fontos neked?</p>
-            <p class="hero-subtext">Két időkerék. Egy őszinte összehasonlítás. Saját vállalás és személyes tanulságok.</p>
+            <p class="hero-lead">Minden iskolai napod 24 órából áll. Egy részéről mások döntenek, a többit te osztod be. De vajon az időd tényleg azt mutatja, ami fontos neked?</p>
+            <p class="hero-subtext">Két időkerék. Egy őszinte összehasonlítás. Saját következtetések.</p>
             <div class="actions-row">
               <button class="btn btn-primary" data-action="start">
                 Induljon a játék <span aria-hidden="true">→</span>
@@ -317,7 +317,7 @@
           <button class="coin-btn ${cat ? 'assigned' : ''} ${ss ? 'stolen' : ''} ${locked ? 'locked' : ''}"
                   data-token="${i}"
                   style="--c:${cat ? cat.color : '#E2E8F0'}"
-                  title="${cat ? escapeHtml(cat.name) + (ss ? ' – kötött időből' : '') : 'Szabad zseton – kattints a hozzáadáshoz'}"
+                  title="${cat ? escapeHtml(cat.name) + (ss ? ' – kötött időből' : '') : 'Szabad időzseton – add a kiválasztott kategóriához'}"
                   aria-label="${i + 1}. zseton: ${cat ? escapeHtml(cat.name) : 'szabad'}${ss ? ', eredetileg kötött idő' : ''}">
             ${cat ? cat.symbol : i + 1}
           </button>
@@ -347,13 +347,13 @@
       const title = ideal ? 'Az én ideális iskolai napom' : 'A valóság – így telik egy iskolai napom';
       const subtitle = ideal
         ? 'A piros, kötött időt áthoztuk a valós napodból. A zöld időt szabadon újratervezheted; szükség esetén a piros is feloldható.'
-        : 'Gondolj egy átlagos tanítási napra! Előbb a kötött időt (iskola, utazás), majd a többi órát oszd be a valós szokásaid szerint.';
+        : 'Gondolj egy átlagos tanítási napra! Nem hétvégére vagy szünetre. Előbb a kötött időt, majd a többi órát oszd be a valós szokásaid szerint.';
 
       let lockBox = ideal ? `
         <div class="lockbar-card">
           <div>
             <strong>🔒 Kötött idő átvéve</strong>
-            <p>A piros zsetonok alapból rögzítve vannak. Ha szükséges, feloldhatod őket.</p>
+            <p>A piros zsetonok alapból rögzítve vannak, de módosíthatók.</p>
           </div>
           <label class="toggle-switch">
             <input id="unlock" type="checkbox" ${state.unlockRed ? 'checked' : ''}> Feloldom
@@ -362,7 +362,7 @@
         ${state.unlockRed ? `
           <div class="pastel-card warning">
             <div class="eyebrow-mini">Módszertani jelzés</div>
-            <p>A pirosból a zöld kategóriákba kerülő zsetonokat a játék „lopott időként” (piros szegéllyel) jelöli. A „lopott idő” a játék szemléltető elnevezése; nem automatikus erkölcsi ítélet.</p>
+            <p>A pirosból a zöld kategóriákba kerülő zsetonokat a játék „lopott időként” külön jelöli. A „lopott idő” a játék szemléltető elnevezése; nem automatikus erkölcsi ítélet.</p>
           </div>
         ` : ''}
       ` : '';
@@ -387,13 +387,13 @@
           <div class="workbench-grid">
             <div class="panel-card">
               <h2 class="panel-title">Oszd ki a zsetonokat!</h2>
-              <p class="panel-desc">Válassz kategóriát, majd nyomj + jelet vagy kattints egy szabad zsetonra.</p>
+              <p class="panel-desc">Válassz kategóriát, majd nyomj + jelet vagy egy szabad zsetont.</p>
 
               <div class="budget-box ${free === 0 ? 'complete' : 'warning'}">
                 <span class="budget-num">${free}</span>
                 <div class="budget-info">
-                  <strong>${free === 0 ? 'Minden óra a helyére került!' : 'Még kiosztható zseton'}</strong>
-                  <span>${used} / 24 zseton beosztva · 1 zseton = 1 óra</span>
+                  <strong>${free === 0 ? 'Minden óra a helyére került' : 'Még kiosztható zseton'}</strong>
+                  <span>${used}/24 zseton kiosztva · minden zseton egy óra</span>
                 </div>
               </div>
 
@@ -413,7 +413,7 @@
                 ${CATEGORIES.filter(c => c.group === 'green').map(c => categoryRow(c, list)).join('')}
               </div>
 
-              <p class="source-citation" style="margin-top:1rem;">A zöld szín nem azt jelenti, hogy a tevékenység elhagyható (pl. az alvás alapvető szükséglet), hanem azt, hogy mekkora mozgástered van az időtartam megválasztásában.</p>
+              <p class="source-citation" style="margin-top:1rem;">A zöld szín nem azt jelenti, hogy a tevékenység elhagyható: az alvás például alapvető szükséglet. A szín azt mutatja, mekkora mozgástered van az időtartam megválasztásában.</p>
 
               ${notice}
 
@@ -432,22 +432,26 @@
                 ${wheelSvg(list, ideal ? 'Ideális időkerék' : 'Valós időkerék')}
               </div>
               <p style="text-align:center; font-size:0.85rem; color:var(--color-text-muted);">
-                ${free ? `${free} üres szelet vár még beosztásra` : 'Készen van a 24 szeletes időkerék!'}
+                ${free ? `${free} üres szelet vár még egy zsetonra` : 'Készen van a 24 szeletes időkerék!'}
               </p>
 
               <div class="cat-group-label" style="border:none; margin-top:1rem;">A 24 zsetonod</div>
+              <p style="font-size:0.8rem; color:var(--color-text-muted); margin-bottom:0.5rem;">Kattints egy arany zsetonra: a kijelölt kategóriába kerül. A kitöltöttekre kattintva visszaveheted őket.</p>
               <div class="coin-grid">${coinGrid(list)}</div>
 
               ${ideal && st ? `
                 <div class="pastel-card warning" style="margin-top:0.85rem;">
                   <strong>${st} „lopott” zseton</strong>
-                  <p style="font-size:0.82rem; margin-top:0.2rem;">Ennyi eredetileg kötött órát osztottál át zöld tevékenységre. Ezeket piros szegély jelöli.</p>
+                  <p style="font-size:0.82rem; margin-top:0.2rem;">Ennyi eredetileg piros órát osztottál át zöld tevékenységre. Ezeket piros szegély jelöli.</p>
                 </div>
               ` : ''}
 
               <div class="cat-group-label" style="border:none; margin-top:1rem;">Jelmagyarázat</div>
               <div class="legend-grid">
                 ${legend(list) || '<p class="source-citation">Még nincs kiosztott idő.</p>'}
+              </div>
+              <div class="source-citation" style="margin-top:0.85rem; border-top:1px solid var(--color-border); padding-top:0.5rem;">
+                Piros = kötött idő · Zöld = beosztható idő · Piros szegélyű zöld = kötött időből átcsoportosítva.
               </div>
             </aside>
           </div>
@@ -490,6 +494,7 @@
       }).join('');
     }
 
+    // Exact biblical and ethical reflections from main branch index.html
     function getInsights() {
       const real = state.real, ideal = state.ideal, items = [];
       const d = id => count(ideal, id) - count(real, id);
@@ -523,7 +528,7 @@
           tag: 'A pihenés helye',
           title: `${Math.abs(d('sleep'))} órával kevesebb alvást tervezel`,
           verse: '2Móz 20,8–11 · Mk 2,27',
-          body: 'Az alvás idejét szabadabban osztod be, de a pihenés alapvető emberi szükséglet. A tankönyv hangsúlyozza, hogy a tartós pihenéshiány kimerüléshez vezethet.',
+          body: 'Az alvás idejét szabadabban osztod be, de a pihenés alapvető emberi szükséglet. A tankönyv hangsúlyozza, hogy a tartós pihenéshiány kimerüléshez vezethet. A játék nem szab meg „helyes” alvásóraszámot.',
           question: 'A felszabadított idő nyeresége arányban állhat azzal, amit a pihenésből elveszel?',
           source: 'Napjaink etikai kihívásai, 15., 17–18. o.'
         });
@@ -535,9 +540,9 @@
           tag: 'Digitális szokások és önuralom',
           title: d('phone') < 0 ? `${Math.abs(d('phone'))} órával kevesebb képernyőidőt választanál` : `${d('phone')} órával több képernyőidőt választanál`,
           verse: '1Kor 6,12',
-          body: 'A digitális eszközök tanulásra, kapcsolattartásra és szórakozásra is szolgálnak. A hosszú képernyőidő önmagában nem bizonyít függőséget; a cél, a következmények és az önkontroll a lényeg.',
+          body: 'A digitális eszközök tanulásra, kapcsolattartásra és szórakozásra is szolgálnak. A hosszú képernyőidő önmagában nem bizonyít függőséget; a cél, a következmények és az önkontroll a lényeg. A „Csak még öt perc!” történet azt mutatja meg, hogyan szoríthatja háttérbe a késő esti görgetés az alvást.',
           question: 'Te választod meg, mikor fejezed be, vagy nehéz abbahagyni?',
-          source: 'Keresztyén etika a digitális világban, 2–3. o.; Digitális Lelkiismeret, 33–37. o.'
+          source: 'Keresztyén etika a digitális világban – LIVRESQ-forrásanyag, 2–3. PDF-old.; Digitális Lelkiismeret, 33–37. PDF-old.'
         });
       }
 
@@ -547,9 +552,9 @@
           tag: 'Kapcsolatok és felebaráti felelősség',
           title: (d('family') + d('friends')) > 0 ? 'Több időt szánnál a kapcsolataidra' : 'A kapcsolatokra szánt idődet is átrendeznéd',
           verse: '1Kor 10,23–24 · Mt 22,39',
-          body: 'A keresztyén szabadság nemcsak azt vizsgálja, nekem mi jó, hanem a másik ember javát is. A tankönyv a stabil emberi kapcsolatokat az egészséges életmód részeként említi.',
+          body: 'A keresztyén szabadság nemcsak azt vizsgálja, nekem mi jó, hanem a másik ember javát is. A tankönyv a stabil emberi kapcsolatokat az egészséges életmód részeként említi. Az óraszám önmagában nem mutatja meg egy kapcsolat minőségét.',
           question: 'Ki az, akire szeretnél tudatosabban figyelni a következő iskolai napon?',
-          source: 'Napjaink etikai kihívásai, 19. o.; XI. református tanterv, 17–18. o.'
+          source: 'Napjaink etikai kihívásai, 19. o.; XI. református tanterv, 17–18. PDF-old.'
         });
       }
 
@@ -561,7 +566,7 @@
           verse: '2Móz 20,8–11 · Mk 2,27',
           body: 'A rekreációnak több formája van: mozgás, játék, művelődés, kikapcsolódás és nyugalom. A tankönyv szerint az a fontos, hogy valóban feltöltsön, és ne ártson neked vagy másoknak.',
           question: 'Az általad választott időtöltés után inkább feltöltődsz, vagy még fáradtabbnak érzed magad?',
-          source: 'Napjaink etikai kihívásai, 14–19. o.'
+          source: 'Napjaink etikai kihívásai, 14–19. o.; Napjaink etikai kihívásai – Tanári segédanyag, 6. PDF-old.'
         });
       }
 
@@ -571,9 +576,9 @@
           tag: 'Tanulás és a tevékenységek egyensúlya',
           title: d('study') > 0 ? `${d('study')} órával több tanulást tervezel` : `${Math.abs(d('study'))} órával kevesebb tanulást tervezel`,
           verse: 'Ef 5,15–16 · Kol 3,17',
-          body: 'A munka és a tanulás nem pusztán kényszer; ugyanakkor a túlzott teljesítményre törekvés a pihenés rovására mehet.',
+          body: 'A munka és a tanulás nem pusztán kényszer; ugyanakkor a túlzott teljesítményre törekvés a pihenés rovására mehet. A tanári segédanyag külön hangsúlyozza a munka és szabadidő egyensúlyát.',
           question: 'Mi segítene abban, hogy a feladataidra és a pihenésre is jusson hely?',
-          source: 'Tanári segédanyag, 6–7. o.; XI. református tanterv, 18. o.'
+          source: 'Napjaink etikai kihívásai – Tanári segédanyag, 6–7. PDF-old.; XI. református tanterv, 18. PDF-old.'
         });
       }
 
@@ -583,21 +588,21 @@
           tag: 'Hit és elcsendesedés',
           title: d('faith') > 0 ? 'Több időt hagynál a hitnek és az elcsendesedésnek' : 'Átgondolnád az elcsendesedés helyét',
           verse: 'Zsolt 23 · Zsolt 25 · Ef 5,15–16',
-          body: 'A XI. osztályos tanterv az Istenben való megpihenést és a döntésekhez kért vezetést is megjeleníti.',
+          body: 'A XI. osztályos tanterv az Istenben való megpihenést és a döntésekhez kért vezetést is megjeleníti. Az időkerék a ráfordított órákat mutatja, de önmagában nem alkalmas a hit vagy az Istennel való kapcsolat értékelésére.',
           question: 'Hogyan lehetne az imádság vagy a csend a mindennapi döntéseid része?',
-          source: 'XI. református tanterv, 10. és 17–18. o.'
+          source: 'XI. református tanterv, 10. és 17–18. PDF-old.'
         });
       }
 
       if (d('other') !== 0) {
         items.push({
           type: 'reflection',
-          tag: 'Egyéb tevékenységek',
+          tag: 'Ami nem fér bele a kategóriákba',
           title: 'Az „egyéb” időd is változna',
           verse: 'Ef 5,15–16',
-          body: 'Az időkerék nem tudja helyetted megmondani, mi tartozik az „egyéb” kategóriába. Az életkörülmények sokfélék.',
+          body: 'Az időkerék nem tudja helyetted megmondani, mi tartozik az „egyéb” kategóriába. Az életkörülmények és a családi elvárások sokfélék; ugyanannyi óra két embernél egészen mást jelenthet.',
           question: 'Mi található valójában az „egyéb” óráid mögött?',
-          source: 'Napjaink etikai kihívásai, 15. o.'
+          source: 'Napjaink etikai kihívásai, 15. o.; Tanári segédanyag, 8. PDF-old.'
         });
       }
 
@@ -607,9 +612,9 @@
           tag: 'Önismeret és felelős döntés',
           title: 'A két napodban nincs nagy változás',
           verse: 'Ef 5,15–16 · 1Kor 6,12',
-          body: 'A két időkerék önmagában nem ad erkölcsi osztályzatot. A tanári segédanyag arra hív, hogy a tevékenységeinket összefüggéseikben nézzük.',
+          body: 'A két időkerék önmagában nem ad erkölcsi osztályzatot. A tanári segédanyag arra hív, hogy a tevékenységeinket összefüggéseikben nézzük, és ne egy szabálylistából induljunk ki.',
           question: 'Mi az az egy szokásod, amelyet most is szívesen megtartanál, és miért?',
-          source: 'Napjaink etikai kihívásai – Tanári segédanyag, 6–9. o.'
+          source: 'Napjaink etikai kihívásai – Tanári segédanyag, 6–9. PDF-old.'
         });
       }
 
@@ -624,8 +629,8 @@
           <h3>${escapeHtml(x.title)}</h3>
           <span class="scripture-tag">Bibliai iránytű: ${escapeHtml(x.verse)}</span>
           <p>${escapeHtml(x.body)}</p>
-          <div class="reflection-question">Kérdés: ${escapeHtml(x.question)}</div>
-          <div class="source-citation">Forrás: ${escapeHtml(x.source)}</div>
+          <div class="reflection-question"><strong>Kérdés:</strong> ${escapeHtml(x.question)}</div>
+          <div class="source-citation"><strong>Forrás:</strong> ${escapeHtml(x.source)}</div>
         </article>
       `;
 
@@ -713,18 +718,18 @@
                 <textarea id="commitment" placeholder="Például: Kevesebbet görgetek este, és korábban lefekszem.">${escapeHtml(state.commitment)}</textarea>
 
                 <div class="actions-row">
-                  <button class="btn btn-primary" data-action="download">↓ Eredményem mentése (UTF-8)</button>
+                  <button class="btn btn-primary" data-action="download">↓ Eredményem mentése</button>
                   <button class="btn btn-secondary" data-action="back">← Ideális nap módosítása</button>
                   <button class="btn btn-warning btn-sm" data-action="reset">Újrakezdés</button>
                 </div>
-                <p class="source-citation" style="margin-top:0.75rem;">A letöltés helyben készül UTF-8 kódolású szövegfájlként. Az adataidat a weboldal nem küldi el sehova.</p>
+                <p class="source-citation" style="margin-top:0.75rem;">A letöltés helyben készül. Az adataidat a weboldal nem küldi el sehova.</p>
               </div>
             </div>
 
             <aside class="panel-card">
               <div class="screen-eyebrow">Személyes felismerések</div>
-              <h2 class="panel-title">Bibliai iránytű és etika</h2>
-              <p class="panel-desc">A visszajelzések a két időbeosztás eltéréseire épülnek a tantervi források alapján.</p>
+              <h2 class="panel-title">Bibliai iránytű</h2>
+              <p class="panel-desc">A visszajelzések a két időbeosztás eltéréseire épülnek. A bibliaszövegeket a feltöltött források hivatkozásai alapján jelöljük; nincsenek erkölcsi ponthatárok.</p>
 
               <div>
                 ${renderInsightsCards()}
@@ -732,7 +737,7 @@
 
               <div class="pastel-card verse" style="margin-top: 1rem;">
                 <div class="eyebrow-mini">Igei útravaló</div>
-                <p><strong>„Nézzétek azért jól, hogyan éltek: ne oktalanul, hanem bölcsen, kihasználva az alkalmas időt...”</strong></p>
+                <p><strong>Az idő bölcs és felelős felhasználása</strong></p>
                 <div class="scripture-tag">Ef 5,15–16 · XI. osztályos tantervi igehely</div>
               </div>
             </aside>
