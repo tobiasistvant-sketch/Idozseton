@@ -1,7 +1,7 @@
 # Jules fejlesztői feladat – IDŐZSETON v0.2
 
 ## Kiindulás és cél
-Magyar nyelvű, XI. osztályos református etikai játék technikai véglegesítése a meglévő index.html alapján. A négyoldalas prototípust a tanár már kipróbálta és elfogadta. **Ne építsd újra és ne írd át önkényesen sem a pedagógiai koncepciót, sem a jóváhagyott látványvilágot, sem az igei és etikai szövegeket.** A fejlesztést külön ágon, ellenőrizhető pull requestben végezd.
+Magyar nyelvű, XI. osztályos református etikai játék technikai véglegesítése a meglévő index.html alapján. A négyoldalas prototípust a tanár már kipróbálta és elfogadta. **A pedagógiai koncepciót, a négy képernyő játékmenetét és az igei/etikai szövegeket tilos önkényesen átírni. A jelenlegi v0.2 látvány csak működő prototípus: a végső dizájnt az alábbi két, már meglévő referenciajáték egységes arculatához kell igazítani.** A fejlesztést külön ágon, ellenőrizhető pull requestben végezd.
 
 Elsőként olvasd el az index.html, README.md és FORRASJEGYZEK.md fájlokat. A projekt statikus, függőségmentes, GitHub Pages-kompatibilis HTML/CSS/JavaScript alkalmazás.
 
@@ -16,12 +16,41 @@ A FORRASJEGYZEK.md a korábban ellenőrzött feltöltött forrásokat és az eze
 
 Nem vezethetsz be előírt egészségi, erkölcsi, vallásossági vagy képernyőidő-óraszám-küszöböt. **Nincs erkölcsi pontozás, rangsor vagy „tökéletes nap” értékelés.** A reflexiót kiválasztó algoritmus saját didaktikai játékszabály, nem forrásszöveg és nem diagnózis. Őrizd meg az ítélkezésmentes, érett tizenéveseknek szóló hangot.
 
+
+## KÖTELEZŐ DIZÁJNFELADAT – AZONOS ARCULAT A KÉT ELŐZŐ JÁTÉKKAL
+A felhasználó **kifejezett követelménye**, hogy az Időzseton **úgy nézzen ki, mint a Digitális Lelkiismeret és a DiákÉletkerék**. Ez nem opcionális inspiráció, hanem az elsődleges vizuális elfogadási feltétel. A két, ugyanazon GitHub-fiókban található nyilvános referenciaprojekt:
+
+- **Digitális Lelkiismeret:** https://github.com/tobiasistvant-sketch/Digitalis-Lelkiismeret — különösen `index.html` és `css/styles.css`.
+- **DiákÉletkerék:** https://github.com/tobiasistvant-sketch/DiakEletkerek — különösen `index.html` és `css/styles.css`. Ennek CSS-e már eleve a Digitális Lelkiismeret vizuális rendszerére épül.
+
+**A reference CSS-ekben ellenőrzött design tokenek (ezeket következetesen használd):**
+- Sötétkék fejléc és elsődleges mély tónus: `#052738`
+- Meleg törtfehér oldalfelület: `#FBF9F6`
+- Fehér kártyák: `#FFFFFF`; világosszürke felületek: `#F0F2F3`
+- Türkiz kiemelések: `#31B6C7`; másodlagos kék akcentus: `#2196F3`
+- Fő szöveg: `#1C2D37`; halvány szöveg: `#5A6E7B`; elválasztó: `#E0E5E8`
+- Betűk: `Plus Jakarta Sans` törzsszöveg, `Space Grotesk` címsorok; rendszerbetűs fallback offline használathoz
+- Kártyák: 8/12/20 px körüli lekerekítések, puha árnyékok; tágas, modern, mobilbarát szerkezet
+- A tanári anyaghoz illő **pasztell magyarázó panelek** (például bibliai útmutatás, etikai reflexió), mint a referenciákban
+
+**Szerkezeti és vizuális minták:**
+- Egységes sötétkék fejléc, baloldali ikon és kétsoros játékcím, jobbra tantárgy-jelvény.
+- Kezdőoldalon `hero-card`, `hero-badge`, nagy cím, alcím, felvezetés, 2–3 információs kártya, jól látható `Kezdés` gomb.
+- További képernyőkön egységes lépésjelzők, világos kártyák, következetes navigáció és gombok.
+- Az eredményképernyőn a grafikonok és időkerék esztétikája is illeszkedjen a referenciákhoz. A bibliai, etikai és önreflexiós szövegek kapjanak az előző játékokra emlékeztető, világos pasztell szekciókat.
+- Külön maradjon jól megkülönböztethető a **piros/kötött**, **zöld/beosztható** és a **piros szegélyű, átcsoportosított („lopott idő”)** zseton. Ezek funkcionális adatjelölések, ezért az arculat egységesítése nem írhatja felül a jelentésüket.
+- Ne legyen sötét témájú, neon/glow/üveg-hatású vagy túlzsúfolt új dizájn. Ne készíts egy harmadik, eltérő designrendszert.
+- A grafikonok ne csak szín alapján legyenek érthetők: címkék, szöveges jelmagyarázat, kontraszt, billentyűzetes navigáció.
+- Külső Google Fonts használatakor a program a betűk letöltése nélkül is maradjon jól használható. A korábban kért adatgyűjtés-mentesség és statikus működés változatlan.
+
+**Kért eredmény:** egymás mellé téve a három projektet egyértelműen látszódjon, hogy ugyanannak az oktatási digitális tananyagcsaládnak a tagjai. Az `Időzseton` sajátossága a 24 órás zsetonkerék, **nem** egy külön vizuális stílus.
+
 ## Konkrét technikai feladatok
 - Vizsgáld át a teljes működést: navigáció, visszalépés, szerkesztés, újrakezdés, teljes 24 órás kiosztás, és korábbi állapotok következetes kezelése.
 - Ellenőrizd a pirosból zöldbe átcsoportosított zsetonok **eredetkövetését** módosítás, visszavonás, újraelosztás és újrakezdés esetén is.
 - Mindkét időkerék minden esetben 24 egységet mutasson, és egyezzen a kategóriánkénti adatokkal.
 - Az eltérések és a kiválasztott magyarázatok legyenek következetesek. Vizsgáld meg a nulla, szélsőséges és ismételten módosított kiosztásokat.
-- Javítsd a mobilos használhatóságot, billentyűzetes kezelést, hozzáférhető címkéket, fókuszállapotot, színkontrasztot és kijelzést a meglévő megjelenés megtartásával.
+- Javítsd a mobilos használhatóságot, billentyűzetes kezelést, hozzáférhető címkéket, fókuszállapotot, színkontrasztot és kijelzést a két megadott referenciajáték arculatához igazítva.
 - Vizsgáld meg a tanuló által írt vállalás kezelését; ne kerüljön végrehajtható HTML-ként a DOM-ba. Ellenőrizd a mentett fájl magyar ékezeteit és UTF-8 kódolását.
 - Ne adj hozzá szervert, regisztrációt, telemetriát, elemző szolgáltatást vagy fölösleges külső függőséget. Az alkalmazás internet nélkül, helyi HTML-fájlként is fusson.
 - Készíts egyszerű teszteket/tesztútmutatót a játékmechanikáról, lehetőleg függőségmentesen.
@@ -35,6 +64,7 @@ Nem vezethetsz be előírt egészségi, erkölcsi, vallásossági vagy képerny�
 5. A teljes elfogadott etikai szöveg, igehely és forrás hűen megmarad.
 6. A vállalás több zsetonra is kiterjedhet.
 7. A statikus alkalmazás helyben és GitHub Pages-en egyaránt használható.
+8. **A dizájn összehangolt a Digitális Lelkiismeret és a DiákÉletkerék tényleges CSS/HTML megjelenésével; a funkcionális piros/zöld/átcsoportosított zsetonok továbbra is megkülönböztethetők.**
 
 ## Kért átadás
-Először elemezd röviden a meglévő kódot. Utána csak az indokolt technikai javításokat végezd el. Nyiss **pull requestet** a main ágra, és a leírásban külön mutasd be: a módosításokat, a lefuttatott teszteket, az esetleg fennmaradó hibákat és a további **tanári/teológiai tartalmi ellenőrzést** igénylő pontokat. A PR-t ne olvaszd be automatikusan.
+Először elemezd röviden a meglévő kódot. Utána a kért, referenciákhoz igazított arculati egységesítést és az indokolt technikai javításokat végezd el. Nyiss **pull requestet** a main ágra, és a leírásban külön mutasd be: a módosításokat, a lefuttatott teszteket, az esetleg fennmaradó hibákat és a további **tanári/teológiai tartalmi ellenőrzést** igénylő pontokat. A PR-t ne olvaszd be automatikusan.
