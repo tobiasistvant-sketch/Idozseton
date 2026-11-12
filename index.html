@@ -112,7 +112,8 @@
     // A comparison and its export are valid only when BOTH days contain 24 assigned hours.
     function hasCompleteDay(list) {
       return Array.isArray(list) && list.length === 24 &&
-             list.every(t => t && t.cat && categoryMap[t.cat]);
+             Array.from(list).every(t => t && typeof t.cat === 'string' &&
+               Object.prototype.hasOwnProperty.call(categoryMap, t.cat));
     }
 
     function hasCompleteDays() {

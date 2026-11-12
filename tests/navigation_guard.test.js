@@ -46,6 +46,23 @@ function resultsStepButton() {
   return button[0];
 }
 
+// Validate all 24 entries, including sparse slots and inherited object keys.
+const invalidDays = [
+  'null',
+  '[]',
+  'new Array(24)',
+  'Array.from({ length: 24 }, (_, id) => id === 12 ? undefined : { cat: "sleep" })',
+  'Array.from({ length: 23 }, () => ({ cat: "sleep" }))',
+  'Array.from({ length: 25 }, () => ({ cat: "sleep" }))',
+  'Array.from({ length: 24 }, () => ({ cat: new String("sleep") }))',
+  ...['', 'unknown', 'toString', 'constructor', '__proto__'].map(cat =>
+    `Array.from({ length: 24 }, () => ({ cat: ${JSON.stringify(cat)} }))`)
+];
+invalidDays.forEach(day => {
+  assert.equal(run(`hasCompleteDay(${day})`), false, `Érvénytelen nap: ${day}`);
+});
+assert.equal(run('CATEGORIES.every(c => hasCompleteDay(Array.from({ length: 24 }, () => ({ cat: c.id }))))'), true);
+
 // Start with two completed, valid 24-hour days.
 run(`
   state.real.forEach(t => { t.cat = 'sleep'; });
@@ -97,4 +114,47 @@ assert.match(nodes.app.innerHTML, /mind a 24 óráját/);
 run('downloadText()');
 assert.equal(downloads.length, 2, 'Hiányos valós nap sem exportálható');
 
-console.log('✓ Időzseton: 24 órás összevetés és letöltés védelme sikeres.');
+// Exhaust every real/ideal allocation total through all four guarded entry points.
+let guardedRoutes = 0;
+for (let realHours = 0; realHours <= 24; realHours++) {
+  for (let idealHours = 0; idealHours <= 24; idealHours++) {
+    const complete = realHours === 24 && idealHours === 24;
+    const expectedPage = complete ? 3 : realHours < 24 ? 1 : 2;
+    run(`
+      state.real = Array.from({ length: 24 }, (_, id) => ({ id, cat: id < ${realHours} ? 'school' : null }));
+      state.ideal = Array.from({ length: 24 }, (_, id) => ({ id, cat: id < ${idealHours} ? 'sleep' : null, source: 'green', origin: 'sleep' }));
+      state.reached = 3;
+      state.page = 2;
+      render();
+    `);
+    assert.equal(/\bdisabled\b/.test(resultsStepButton()), !complete);
+
+    run('setPage(3)');
+    assert.equal(run('state.page'), expectedPage, `setPage: ${realHours}/${idealHours}`);
+    guardedRoutes++;
+
+    run('state.page = 2; state.reached = 2; advance(3)');
+    assert.equal(run('state.page'), expectedPage, `advance: ${realHours}/${idealHours}`);
+    assert.equal(run('state.reached'), complete ? 3 : 2);
+    guardedRoutes++;
+
+    run('state.page = 3; render()');
+    assert.equal(run('state.page'), expectedPage, `render: ${realHours}/${idealHours}`);
+    assert.equal(nodes.app.innerHTML.includes('Mit mutat a két napod'), complete);
+    guardedRoutes++;
+
+    const previousDownloads = downloads.length;
+    run('downloadText()');
+    assert.equal(downloads.length - previousDownloads, complete ? 1 : 0, `download: ${realHours}/${idealHours}`);
+    guardedRoutes++;
+  }
+}
+
+// No ideal plan exists yet: stale navigation/export must return to preparation.
+run('state.ideal = null; state.reached = 3; state.page = 3; render()');
+assert.equal(run('state.page'), 1);
+const previousDownloads = downloads.length;
+run('downloadText()');
+assert.equal(downloads.length, previousDownloads);
+
+console.log(`✓ Időzseton: érvénytelen napok és ${guardedRoutes} navigációs/export ellenőrzés sikeres.`);
