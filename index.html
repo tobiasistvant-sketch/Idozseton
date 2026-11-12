@@ -108,6 +108,30 @@
     const tokens = () => (state.page === 2 ? state.ideal : state.real);
     const count = (list, id) => list.filter(t => t.cat === id).length;
     const countFree = list => list.filter(t => !t.cat).length;
+
+    // A comparison and its export are valid only when BOTH days contain 24 assigned hours.
+    function hasCompleteDay(list) {
+      return Array.isArray(list) && list.length === 24 &&
+             list.every(t => t && t.cat && categoryMap[t.cat]);
+    }
+
+    function hasCompleteDays() {
+      return hasCompleteDay(state.real) && hasCompleteDay(state.ideal);
+    }
+
+    function requireCompleteDays() {
+      if (hasCompleteDays()) return true;
+
+      // If no ideal plan exists, the real-day step must be completed first.
+      const needsRealStep = !hasCompleteDay(state.real) || !Array.isArray(state.ideal);
+      state.page = needsRealStep ? 1 : 2;
+      state.selected = needsRealStep ? 'school' : 'sleep';
+      state.notice = 'Az összehasonlításhoz és a letöltéshez mindkét nap mind a 24 óráját ki kell osztanod.';
+      render();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return false;
+    }
+
     const stolen = list => list.filter(t => t.source === 'red' && t.cat && categoryMap[t.cat].group === 'green').length;
 
     function prepareIdeal() {
@@ -176,6 +200,7 @@
 
     function setPage(page) {
       if (page > state.reached) return;
+      if (page === 3 && !requireCompleteDays()) return;
       state.page = page;
       state.selected = page === 2 ? 'sleep' : 'school';
       state.notice = '';
@@ -184,6 +209,7 @@
     }
 
     function advance(page) {
+      if (page === 3 && !requireCompleteDays()) return;
       state.reached = Math.max(state.reached, page);
       setPage(page);
     }
@@ -196,7 +222,7 @@
       nav.innerHTML = labels.map((label, i) => {
         const isActive = state.page === i;
         const isDone = i < state.reached;
-        const isDisabled = i > state.reached;
+        const isDisabled = i > state.reached || (i === 3 && !hasCompleteDays());
         return `
           ${i > 0 ? `<div class="step-divider ${i <= state.reached ? 'active' : ''}"></div>` : ''}
           <button class="step-item ${isActive ? 'active' : ''} ${isDone ? 'done' : ''}"
@@ -747,6 +773,11 @@
     }
 
     function render() {
+      // Defensive check: never render a stale result if the token allocation changed.
+      if (state.page === 3 && !hasCompleteDays()) {
+        requireCompleteDays();
+        return;
+      }
       renderStepsNav();
       const app = $('app');
       if (!app) return;
@@ -774,6 +805,7 @@
     }
 
     function downloadText() {
+      if (!requireCompleteDays()) return;
       const blob = new Blob(['\ufeff' + resultText()], { type: 'text/plain;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
