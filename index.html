@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#052738">
+  <meta name="theme-color" content="#344D68">
   <meta name="description" content="Időzseton – Interaktív keresztyén etikai önismereti játék, 24 órával és két időkerékkel XI. osztályos diákoknak.">
   <title>Időzseton – Mire költöd az életedet?</title>
 
@@ -54,28 +54,30 @@
     <footer class="app-footer">
       <div class="footer-inner">
         <span>24 óra • Egy átlagos iskolai nap • A te döntéseid</span>
-        <span>Helyben működő alkalmazás · Nincs adatgyűjtés és regisztráció</span>
+        <span>Helyben működő alkalmazás · Nincs adatgyűjtés és regisztráció · <a href="sources.html" target="_blank" rel="noopener">Felhasznált források</a></span>
       </div>
     </footer>
   </div>
 
+  <script src="js/result-sheet.js"></script>
+  <script src="js/pdf-export.js"></script>
   <script>
     'use strict';
 
     // 12 Functional Time Categories
     const CATEGORIES = [
-      { id: 'school', name: 'Iskola / munkahely', group: 'red', color: '#ed6a78', symbol: 'I' },
-      { id: 'travel', name: 'Utazás', group: 'red', color: '#cf5c6c', symbol: 'U' },
-      { id: 'duty', name: 'Egyéb kötelesség', group: 'red', color: '#f0919a', symbol: 'K' },
-      { id: 'sleep', name: 'Alvás', group: 'green', color: '#80dfc0', symbol: 'A' },
-      { id: 'study', name: 'Tanulás', group: 'green', color: '#38b9ae', symbol: 'T' },
-      { id: 'phone', name: 'Telefon / internet', group: 'green', color: '#259993', symbol: 'N' },
-      { id: 'family', name: 'Család', group: 'green', color: '#9adfb5', symbol: 'C' },
-      { id: 'friends', name: 'Barátok', group: 'green', color: '#58bc93', symbol: 'B' },
-      { id: 'sport', name: 'Sport / hobbi', group: 'green', color: '#8fd18b', symbol: 'S' },
-      { id: 'faith', name: 'Hit / elcsendesedés', group: 'green', color: '#b9dda0', symbol: 'H' },
-      { id: 'rest', name: 'Pihenés / szórakozás', group: 'green', color: '#4eaa84', symbol: 'P' },
-      { id: 'other', name: 'Egyéb', group: 'green', color: '#80b9b0', symbol: 'E' }
+      { id: 'school', name: 'Iskola / munkahely', group: 'red', color: '#344D68', symbol: 'I' },
+      { id: 'travel', name: 'Utazás', group: 'red', color: '#A45D32', symbol: 'U' },
+      { id: 'duty', name: 'Egyéb kötelesség', group: 'red', color: '#4C5F30', symbol: 'K' },
+      { id: 'sleep', name: 'Alvás', group: 'green', color: '#795878', symbol: 'A' },
+      { id: 'study', name: 'Tanulás', group: 'green', color: '#56748A', symbol: 'T' },
+      { id: 'phone', name: 'Telefon / internet', group: 'green', color: '#834525', symbol: 'N' },
+      { id: 'family', name: 'Család', group: 'green', color: '#687B42', symbol: 'C' },
+      { id: 'friends', name: 'Barátok', group: 'green', color: '#53384F', symbol: 'B' },
+      { id: 'sport', name: 'Sport / hobbi', group: 'green', color: '#263C53', symbol: 'S' },
+      { id: 'faith', name: 'Hit / elcsendesedés', group: 'green', color: '#A66640', symbol: 'H' },
+      { id: 'rest', name: 'Pihenés / szórakozás', group: 'green', color: '#806B31', symbol: 'P' },
+      { id: 'other', name: 'Egyéb', group: 'green', color: '#8A6488', symbol: 'E' }
     ];
 
     const categoryMap = Object.fromEntries(CATEGORIES.map(x => [x.id, x]));
@@ -255,27 +257,32 @@
       let paths = ordered.map((t, i) => {
         let a = -90 + i * 15, b = a + 15;
         let isStolen = t.source === 'red' && t.cat && categoryMap[t.cat].group === 'green';
-        let fill = t.cat ? categoryMap[t.cat].color : '#E2E8F0';
+        let fill = t.cat ? categoryMap[t.cat].color : 'var(--color-empty-token)';
         let label = t.cat ? `${categoryMap[t.cat].name} – ${isStolen ? 'kötött időből átcsoportosítva' : '1 óra'}` : 'Még nincs kiosztva';
         return `
-          <g>
+          <g class="wheel-slice ${t.cat ? 'group-' + categoryMap[t.cat].group : ''}">
             <title>${escapeHtml(label)}</title>
-            <path d="${arcPath(170, 170, 70, 148, a, b)}" fill="${fill}" stroke="#142237" stroke-width="2"/>
-            ${isStolen ? `<path d="${arcPath(170, 170, 133, 146, a + 1.2, b - 1.2)}" fill="#a8234e" stroke="#ffd5d8" stroke-width="1.5"/>` : ''}
-            <text x="${(170 + 109 * Math.cos((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
-                  y="${(174 + 109 * Math.sin((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
-                  fill="${t.cat ? '#132836' : '#8195ac'}"
-                  text-anchor="middle" font-size="11" font-weight="800">${i + 1}</text>
+            <path class="wheel-segment" d="${arcPath(170, 170, 70, 148, a, b)}" fill="${fill}"/>
+            ${t.cat && categoryMap[t.cat].group === 'red' ? `<path class="wheel-bound-mark" d="${arcPath(170, 170, 137, 146, a + 1.2, b - 1.2)}"/>` : ''}
+            ${isStolen ? `<path class="wheel-stolen-mark" d="${arcPath(170, 170, 133, 146, a + 1.2, b - 1.2)}"/>` : ''}
+            <text class="wheel-hour ${t.cat ? 'assigned' : ''}"
+                  x="${(170 + (t.cat ? 88 : 109) * Math.cos((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
+                  y="${(173 + (t.cat ? 88 : 109) * Math.sin((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
+                  text-anchor="middle">${i + 1}</text>
+            ${t.cat ? `<text class="wheel-letter" aria-hidden="true"
+                  x="${(170 + 116 * Math.cos((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
+                  y="${(174 + 116 * Math.sin((a + b) / 2 * Math.PI / 180)).toFixed(2)}"
+                  text-anchor="middle">${categoryMap[t.cat].symbol}</text>` : ''}
           </g>
         `;
       }).join('');
       let used = 24 - countFree(list);
       return `
         <svg viewBox="0 0 340 340" role="img" aria-label="${escapeHtml(description)}. ${used} a 24 órából kiosztva.">
-          <circle cx="170" cy="170" r="153" fill="none" stroke="#CBD5E1" stroke-width="1"/>
+          <circle cx="170" cy="170" r="153" fill="none" stroke="var(--color-border)" stroke-width="1"/>
           ${paths}
-          <circle cx="170" cy="170" r="66" fill="#052738" stroke="#31B6C7" stroke-width="2"/>
-          <text x="170" y="164" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="46" font-weight="700" fill="#31B6C7">24</text>
+          <circle cx="170" cy="170" r="66" fill="var(--color-header-bg)" stroke="var(--color-header-sub)" stroke-width="2"/>
+          <text x="170" y="164" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="46" font-weight="700" fill="var(--color-header-sub)">24</text>
           <text x="170" y="188" text-anchor="middle" font-size="11" letter-spacing="2" font-weight="700" fill="#FFFFFF">ÓRA</text>
         </svg>
       `;
@@ -323,7 +330,7 @@
       return `
         <div class="cat-card ${state.selected === c.id ? 'selected' : ''} ${locked ? 'locked' : ''}">
           <button class="cat-select-btn" data-select="${c.id}" aria-pressed="${state.selected === c.id}" title="${escapeHtml(c.name)} kiválasztása">
-            <span class="cat-swatch" style="--color:${c.color}"></span>
+            <span class="cat-swatch group-${c.group}" style="--color:${c.color}" aria-hidden="true">${c.symbol}</span>
             <span class="cat-name-text">${escapeHtml(c.name)}</span>
           </button>
           <div class="cat-controls">
@@ -341,9 +348,9 @@
         let ss = t.source === 'red' && cat && cat.group === 'green';
         let locked = state.page === 2 && cat && cat.group === 'red' && !state.unlockRed;
         return `
-          <button class="coin-btn ${cat ? 'assigned' : ''} ${ss ? 'stolen' : ''} ${locked ? 'locked' : ''}"
+          <button class="coin-btn ${cat ? 'assigned group-' + cat.group : ''} ${ss ? 'stolen' : ''} ${locked ? 'locked' : ''}"
                   data-token="${i}"
-                  style="--c:${cat ? cat.color : '#E2E8F0'}"
+                  style="--c:${cat ? cat.color : 'var(--color-empty-token)'}"
                   title="${cat ? escapeHtml(cat.name) + (ss ? ' – kötött időből' : '') : 'Szabad időzseton – add a kiválasztott kategóriához'}"
                   aria-label="${i + 1}. zseton: ${cat ? escapeHtml(cat.name) : 'szabad'}${ss ? ', eredetileg kötött idő' : ''}">
             ${cat ? cat.symbol : i + 1}
@@ -356,7 +363,7 @@
       return CATEGORIES.filter(c => count(list, c.id) > 0).map(c => `
         <div class="legend-row">
           <span class="legend-left">
-            <span class="cat-swatch" style="--color:${c.color}"></span>
+            <span class="cat-swatch group-${c.group}" style="--color:${c.color}" aria-hidden="true">${c.symbol}</span>
             ${escapeHtml(c.name)}
           </span>
           <strong>${count(list, c.id)} ó</strong>
@@ -477,8 +484,10 @@
               <div class="legend-grid">
                 ${legend(list) || '<p class="source-citation">Még nincs kiosztott idő.</p>'}
               </div>
-              <div class="source-citation" style="margin-top:0.85rem; border-top:1px solid var(--color-border); padding-top:0.5rem;">
-                Piros = kötött idő · Zöld = beosztható idő · Piros szegélyű zöld = kötött időből átcsoportosítva.
+              <div class="source-citation group-key" style="margin-top:0.85rem; border-top:1px solid var(--color-border); padding-top:0.5rem;">
+                <span><i class="group-key-mark bound" aria-hidden="true"></i>Piros = kötött idő</span> ·
+                <span><i class="group-key-mark free" aria-hidden="true"></i>Zöld = beosztható idő</span> ·
+                <span><i class="group-key-mark transferred" aria-hidden="true"></i>Piros szegélyű zöld = kötött időből átcsoportosítva.</span>
               </div>
             </aside>
           </div>
@@ -498,7 +507,7 @@
         return `
           <div class="comparison-row">
             <div class="comp-name">
-              <span class="cat-swatch" style="--color:${c.color}"></span>
+              <span class="cat-swatch group-${c.group}" style="--color:${c.color}" aria-hidden="true">${c.symbol}</span>
               ${escapeHtml(c.name)}
             </div>
             <div class="comp-bars">
@@ -744,8 +753,15 @@
                 <label for="commitment">Mit próbálsz ki a következő iskolai napon?</label>
                 <textarea id="commitment" placeholder="Például: Kevesebbet görgetek este, és korábban lefekszem.">${escapeHtml(state.commitment)}</textarea>
 
+                <div class="export-actions" aria-label="Eredménylap letöltése">
+                  <button class="btn btn-primary" data-action="download-png" data-export-format="png">Eredménylap letöltése képként (PNG)</button>
+                  <div class="export-secondary-actions">
+                    <button class="btn btn-secondary" data-action="download-pdf" data-export-format="pdf">PDF letöltése</button>
+                    <button class="btn btn-secondary" data-action="download" data-export-format="txt">Részletes szöveges eredmény (TXT)</button>
+                  </div>
+                  <p id="export-status" class="export-status" role="status" aria-live="polite"></p>
+                </div>
                 <div class="actions-row">
-                  <button class="btn btn-primary" data-action="download">↓ Eredményem mentése</button>
                   <button class="btn btn-secondary" data-action="back">← Ideális nap módosítása</button>
                   <button class="btn btn-warning btn-sm" data-action="reset">Újrakezdés</button>
                 </div>
@@ -785,35 +801,110 @@
       app.innerHTML = state.page === 0 ? renderIntro() : state.page === 3 ? renderResults() : renderWorkbench();
     }
 
-    function resultText() {
+    // One detached snapshot feeds every export; live allocations are never changed.
+    function createResultSnapshot() {
+      const commitment = $('commitment');
+      if (commitment) state.commitment = commitment.value;
+      const copyTokens = list => Object.freeze(list.map(t => Object.freeze({ ...t })));
+      return Object.freeze({
+        categories: Object.freeze(CATEGORIES.map(c => Object.freeze({
+          ...c, real: count(state.real, c.id), ideal: count(state.ideal, c.id),
+          delta: count(state.ideal, c.id) - count(state.real, c.id)
+        }))),
+        realTokens: copyTokens(state.real),
+        idealTokens: copyTokens(state.ideal),
+        commitment: state.commitment,
+        insights: Object.freeze(getInsights().map(it => Object.freeze({ ...it })))
+      });
+    }
+
+    function resultText(snapshot = createResultSnapshot()) {
       let a = [
         'IDŐZSETON – Mire költöd az életedet?',
         'Egy átlagos iskolai nap – személyes összehasonlítás',
         '',
         'Kategória | Valóság | Ideális | Eltérés'
       ];
-      for (let c of CATEGORIES) {
-        let r = count(state.real, c.id);
-        let i = count(state.ideal, c.id);
+      for (let c of snapshot.categories) {
+        let r = c.real;
+        let i = c.ideal;
         a.push(`${c.name} | ${r} ó | ${i} ó | ${i - r >= 0 ? '+' : ''}${i - r} ó`);
       }
-      a.push('', 'Kötött időből átcsoportosítva: ' + stolen(state.ideal) + ' óra', '', 'Forrásalapú reflexiók:');
-      for (const it of getInsights()) {
-        a.push('', it.title, 'Igehely: ' + it.verse, it.body, 'Önreflexió: ' + it.question, 'Forrás: ' + it.source);
+      a.push('', 'Kötött időből átcsoportosítva: ' + stolen(snapshot.idealTokens) + ' óra', '', 'Forrásalapú reflexiók:');
+      for (const it of snapshot.insights) {
+        a.push('', it.title, 'Igehely: ' + it.verse, it.body, 'Önreflexió: ' + it.question);
       }
-      a.push('', 'Személyes vállalás:', state.commitment.trim() || '(nincs megadva)', '', 'A két időkerék nem erkölcsi osztályzat.');
+      a.push('', 'Személyes vállalás:', snapshot.commitment.trim() || '(nincs megadva)', '', 'A két időkerék nem erkölcsi osztályzat.');
       return a.join('\n');
     }
 
-    function downloadText() {
-      if (!requireCompleteDays()) return;
-      const blob = new Blob(['\ufeff' + resultText()], { type: 'text/plain;charset=utf-8' });
+    function downloadBlob(blob, filename) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'idozseton-szemelyes-eredmeny.txt';
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 2500);
+      a.download = filename;
+      try {
+        a.click();
+      } finally {
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      }
+    }
+
+    let exportInProgress = false;
+
+    function setExportStatus(message, failed = false) {
+      const status = $('export-status');
+      if (!status) return;
+      status.textContent = message;
+      status.className = 'export-status' + (failed ? ' export-error' : '');
+    }
+
+    function setExportBusy(busy) {
+      document.querySelectorAll('[data-export-format]').forEach(button => {
+        button.disabled = busy;
+      });
+      const status = $('export-status');
+      if (status) status.setAttribute('aria-busy', String(busy));
+    }
+
+    function downloadText() {
+      if (!requireCompleteDays() || exportInProgress) return;
+      try {
+        const snapshot = createResultSnapshot();
+        const blob = new Blob(['\ufeff' + resultText(snapshot)], { type: 'text/plain;charset=utf-8' });
+        downloadBlob(blob, 'idozseton-szemelyes-eredmeny.txt');
+        setExportStatus('A részletes szöveges eredmény letöltése elkészült.');
+      } catch (error) {
+        setExportStatus('Nem sikerült elkészíteni a szöveges eredményt. Kérjük, próbáld újra.', true);
+      }
+    }
+
+    async function downloadVisual(format) {
+      if (!requireCompleteDays() || exportInProgress) return;
+      let pages = [];
+      try {
+        exportInProgress = true;
+        setExportBusy(true);
+        setExportStatus('Az eredménylap készül…');
+        const snapshot = createResultSnapshot();
+        if (!window.ResultSheet || (format === 'pdf' && !window.PDFExport)) {
+          throw new Error('Az exportáláshoz szükséges fájl nem töltődött be. Frissítsd az oldalt, vagy válaszd a TXT-formátumot.');
+        }
+        pages = await window.ResultSheet.renderPages(snapshot);
+        const blob = format === 'png'
+          ? await window.ResultSheet.toPNG(pages)
+          : await window.PDFExport.fromCanvases(pages);
+        // Navigation may have changed the live plan during rendering.
+        if (!requireCompleteDays()) return;
+        downloadBlob(blob, 'Idozseton_szemelyes_eredmeny.' + format);
+        setExportStatus('Az eredménylap letöltése elkészült (' + format.toUpperCase() + ').');
+      } catch (error) {
+        setExportStatus('Nem sikerült elkészíteni az eredménylapot. ' + (error.message || 'Próbáld újra, vagy válaszd a TXT-formátumot.'), true);
+      } finally {
+        pages.forEach(canvas => { canvas.width = 0; canvas.height = 0; });
+        exportInProgress = false;
+        setExportBusy(false);
+      }
     }
 
     document.addEventListener('click', event => {
@@ -871,6 +962,12 @@
           break;
         case 'download':
           downloadText();
+          break;
+        case 'download-png':
+          downloadVisual('png');
+          break;
+        case 'download-pdf':
+          downloadVisual('pdf');
           break;
         case 'reset':
           if (confirm('Újrakezded a játékot? A jelenlegi zsetonbeosztások elvesznek.')) {
