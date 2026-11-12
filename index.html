@@ -54,11 +54,13 @@
     <footer class="app-footer">
       <div class="footer-inner">
         <span>24 óra • Egy átlagos iskolai nap • A te döntéseid</span>
-        <span>Helyben működő alkalmazás · Nincs adatgyűjtés és regisztráció</span>
+        <span>Helyben működő alkalmazás · Nincs adatgyűjtés és regisztráció · <a href="sources.html" target="_blank" rel="noopener">Felhasznált források</a></span>
       </div>
     </footer>
   </div>
 
+  <script src="js/result-sheet.js"></script>
+  <script src="js/pdf-export.js"></script>
   <script>
     'use strict';
 
@@ -751,8 +753,15 @@
                 <label for="commitment">Mit próbálsz ki a következő iskolai napon?</label>
                 <textarea id="commitment" placeholder="Például: Kevesebbet görgetek este, és korábban lefekszem.">${escapeHtml(state.commitment)}</textarea>
 
+                <div class="export-actions" aria-label="Eredménylap letöltése">
+                  <button class="btn btn-primary" data-action="download-png" data-export-format="png">Eredménylap letöltése képként (PNG)</button>
+                  <div class="export-secondary-actions">
+                    <button class="btn btn-secondary" data-action="download-pdf" data-export-format="pdf">PDF letöltése</button>
+                    <button class="btn btn-secondary" data-action="download" data-export-format="txt">Részletes szöveges eredmény (TXT)</button>
+                  </div>
+                  <p id="export-status" class="export-status" role="status" aria-live="polite"></p>
+                </div>
                 <div class="actions-row">
-                  <button class="btn btn-primary" data-action="download">↓ Eredményem mentése</button>
                   <button class="btn btn-secondary" data-action="back">← Ideális nap módosítása</button>
                   <button class="btn btn-warning btn-sm" data-action="reset">Újrakezdés</button>
                 </div>
@@ -792,35 +801,110 @@
       app.innerHTML = state.page === 0 ? renderIntro() : state.page === 3 ? renderResults() : renderWorkbench();
     }
 
-    function resultText() {
+    // One detached snapshot feeds every export; live allocations are never changed.
+    function createResultSnapshot() {
+      const commitment = $('commitment');
+      if (commitment) state.commitment = commitment.value;
+      const copyTokens = list => Object.freeze(list.map(t => Object.freeze({ ...t })));
+      return Object.freeze({
+        categories: Object.freeze(CATEGORIES.map(c => Object.freeze({
+          ...c, real: count(state.real, c.id), ideal: count(state.ideal, c.id),
+          delta: count(state.ideal, c.id) - count(state.real, c.id)
+        }))),
+        realTokens: copyTokens(state.real),
+        idealTokens: copyTokens(state.ideal),
+        commitment: state.commitment,
+        insights: Object.freeze(getInsights().map(it => Object.freeze({ ...it })))
+      });
+    }
+
+    function resultText(snapshot = createResultSnapshot()) {
       let a = [
         'IDŐZSETON – Mire költöd az életedet?',
         'Egy átlagos iskolai nap – személyes összehasonlítás',
         '',
         'Kategória | Valóság | Ideális | Eltérés'
       ];
-      for (let c of CATEGORIES) {
-        let r = count(state.real, c.id);
-        let i = count(state.ideal, c.id);
+      for (let c of snapshot.categories) {
+        let r = c.real;
+        let i = c.ideal;
         a.push(`${c.name} | ${r} ó | ${i} ó | ${i - r >= 0 ? '+' : ''}${i - r} ó`);
       }
-      a.push('', 'Kötött időből átcsoportosítva: ' + stolen(state.ideal) + ' óra', '', 'Forrásalapú reflexiók:');
-      for (const it of getInsights()) {
-        a.push('', it.title, 'Igehely: ' + it.verse, it.body, 'Önreflexió: ' + it.question, 'Forrás: ' + it.source);
+      a.push('', 'Kötött időből átcsoportosítva: ' + stolen(snapshot.idealTokens) + ' óra', '', 'Forrásalapú reflexiók:');
+      for (const it of snapshot.insights) {
+        a.push('', it.title, 'Igehely: ' + it.verse, it.body, 'Önreflexió: ' + it.question);
       }
-      a.push('', 'Személyes vállalás:', state.commitment.trim() || '(nincs megadva)', '', 'A két időkerék nem erkölcsi osztályzat.');
+      a.push('', 'Személyes vállalás:', snapshot.commitment.trim() || '(nincs megadva)', '', 'A két időkerék nem erkölcsi osztályzat.');
       return a.join('\n');
     }
 
-    function downloadText() {
-      if (!requireCompleteDays()) return;
-      const blob = new Blob(['\ufeff' + resultText()], { type: 'text/plain;charset=utf-8' });
+    function downloadBlob(blob, filename) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'idozseton-szemelyes-eredmeny.txt';
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 2500);
+      a.download = filename;
+      try {
+        a.click();
+      } finally {
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      }
+    }
+
+    let exportInProgress = false;
+
+    function setExportStatus(message, failed = false) {
+      const status = $('export-status');
+      if (!status) return;
+      status.textContent = message;
+      status.className = 'export-status' + (failed ? ' export-error' : '');
+    }
+
+    function setExportBusy(busy) {
+      document.querySelectorAll('[data-export-format]').forEach(button => {
+        button.disabled = busy;
+      });
+      const status = $('export-status');
+      if (status) status.setAttribute('aria-busy', String(busy));
+    }
+
+    function downloadText() {
+      if (!requireCompleteDays() || exportInProgress) return;
+      try {
+        const snapshot = createResultSnapshot();
+        const blob = new Blob(['\ufeff' + resultText(snapshot)], { type: 'text/plain;charset=utf-8' });
+        downloadBlob(blob, 'idozseton-szemelyes-eredmeny.txt');
+        setExportStatus('A részletes szöveges eredmény letöltése elkészült.');
+      } catch (error) {
+        setExportStatus('Nem sikerült elkészíteni a szöveges eredményt. Kérjük, próbáld újra.', true);
+      }
+    }
+
+    async function downloadVisual(format) {
+      if (!requireCompleteDays() || exportInProgress) return;
+      let pages = [];
+      try {
+        exportInProgress = true;
+        setExportBusy(true);
+        setExportStatus('Az eredménylap készül…');
+        const snapshot = createResultSnapshot();
+        if (!window.ResultSheet || (format === 'pdf' && !window.PDFExport)) {
+          throw new Error('Az exportáláshoz szükséges fájl nem töltődött be. Frissítsd az oldalt, vagy válaszd a TXT-formátumot.');
+        }
+        pages = await window.ResultSheet.renderPages(snapshot);
+        const blob = format === 'png'
+          ? await window.ResultSheet.toPNG(pages)
+          : await window.PDFExport.fromCanvases(pages);
+        // Navigation may have changed the live plan during rendering.
+        if (!requireCompleteDays()) return;
+        downloadBlob(blob, 'Idozseton_szemelyes_eredmeny.' + format);
+        setExportStatus('Az eredménylap letöltése elkészült (' + format.toUpperCase() + ').');
+      } catch (error) {
+        setExportStatus('Nem sikerült elkészíteni az eredménylapot. ' + (error.message || 'Próbáld újra, vagy válaszd a TXT-formátumot.'), true);
+      } finally {
+        pages.forEach(canvas => { canvas.width = 0; canvas.height = 0; });
+        exportInProgress = false;
+        setExportBusy(false);
+      }
     }
 
     document.addEventListener('click', event => {
@@ -878,6 +962,12 @@
           break;
         case 'download':
           downloadText();
+          break;
+        case 'download-png':
+          downloadVisual('png');
+          break;
+        case 'download-pdf':
+          downloadVisual('pdf');
           break;
         case 'reset':
           if (confirm('Újrakezded a játékot? A jelenlegi zsetonbeosztások elvesznek.')) {

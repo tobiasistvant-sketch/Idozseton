@@ -398,6 +398,56 @@ textarea:focus-visible,
   margin-top: 1.5rem;
 }
 
+.export-actions {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+.export-actions .btn {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  min-height: 44px;
+}
+.export-secondary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.export-status {
+  min-height: 1.5em;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+.export-error {
+  color: var(--color-bound-red);
+}
+.app-footer a {
+  color: var(--color-primary);
+  text-underline-offset: 3px;
+}
+
+.sources-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.sources-page h1,
+.sources-page h2 {
+  margin: 1.5rem 0 0.75rem;
+  color: var(--color-header-bg);
+  font-family: var(--font-heading);
+}
+.sources-page p,
+.sources-page li {
+  line-height: 1.7;
+  margin-bottom: 0.85rem;
+  overflow-wrap: anywhere;
+}
+.sources-page ol,
+.sources-page ul {
+  padding-left: 1.5rem;
+}
+
 /* Hero Card / Screen 1 */
 .hero-card {
   background: var(--color-surface-white);
